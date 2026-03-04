@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algorithm Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>Algorithm Visualizer</h1>
+    <nav class="nav">
+      <a href="index.html" class="nav-link nav-link--active">Bubble Sort</a>
+      <a href="graph.html" class="nav-link">Graph Traversals</a>
+      <a href="counting.html" class="nav-link">Counting Sort</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section class="controls">
+      <div class="controls-row">
+        <button id="generateArrayBtn">Generate Random Array</button>
+        <button id="startSortBtn">Start Bubble Sort</button>
+
+        <div class="slider-group">
+          <label for="speedRange">Speed:</label>
+          <input
+            type="range"
+            id="speedRange"
+            min="10"
+            max="1000"
+            value="200"
+          />
+          <span id="speedLabel">200 ms</span>
+        </div>
+      </div>
+
+      <div class="controls-row controls-row--input">
+        <label for="customArrayInput" class="input-label">
+          Custom array (numbers, space separated):
+        </label>
+        <input
+          type="text"
+          id="customArrayInput"
+          class="text-input"
+          placeholder="e.g. 5 3 8 1 2"
+        />
+        <button id="setArrayBtn">Apply Array</button>
+      </div>
+    </section>
+
+    <section class="visualizer">
+      <div id="arrayContainer" class="array-container"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

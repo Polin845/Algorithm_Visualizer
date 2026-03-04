@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Counting Sort - Algorithm Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>Algorithm Visualizer</h1>
+    <nav class="nav">
+      <a href="index.html" class="nav-link">Bubble Sort</a>
+      <a href="graph.html" class="nav-link">Graph Traversals</a>
+      <a href="counting.html" class="nav-link nav-link--active">Counting Sort</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section class="controls">
+      <div class="controls-row">
+        <button id="countingGenerateArrayBtn">Generate Random Array</button>
+        <button id="countingStartSortBtn">Start Counting Sort</button>
+
+        <div class="slider-group">
+          <label for="countingSpeedRange">Speed:</label>
+          <input
+            type="range"
+            id="countingSpeedRange"
+            min="30"
+            max="800"
+            value="200"
+          />
+          <span id="countingSpeedLabel">200 ms</span>
+        </div>
+      </div>
+
+      <div class="controls-row controls-row--input">
+        <label for="countingCustomArrayInput" class="input-label">
+          Custom array (non‑negative integers, space separated, small values recommended):
+        </label>
+        <input
+          type="text"
+          id="countingCustomArrayInput"
+          class="text-input"
+          placeholder="e.g. 1 4 2 0 3 2"
+        />
+        <button id="countingSetArrayBtn">Apply Array</button>
+      </div>
+      <div class="info">
+        Counting sort works with non‑negative integers. For best visualization keep values in range 0‑20.
+      </div>
+    </section>
+
+    <section class="visualizer">
+      <div id="countingArrayContainer" class="array-container"></div>
+    </section>
+  </main>
+
+  <script src="counting.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graph Traversals - Algorithm Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>Algorithm Visualizer</h1>
+    <nav class="nav">
+      <a href="index.html" class="nav-link">Bubble Sort</a>
+      <a href="graph.html" class="nav-link nav-link--active">Graph Traversals</a>
+      <a href="counting.html" class="nav-link">Counting Sort</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section class="controls">
+      <div class="controls-row">
+        <button id="generateGraphBtn">Generate Random Graph</button>
+        <button id="startBfsBtn">Start BFS</button>
+        <button id="startDfsBtn">Start DFS</button>
+
+        <div class="slider-group">
+          <label for="graphSpeedRange">Speed:</label>
+          <input
+            type="range"
+            id="graphSpeedRange"
+            min="50"
+            max="1000"
+            value="250"
+          />
+          <span id="graphSpeedLabel">250 ms</span>
+        </div>
+      </div>
+      <div class="info">
+        Traversal starts from node 0. Nodes will be highlighted in the order they are visited.
+      </div>
+    </section>
+
+    <section class="visualizer">
+      <div id="graphContainer" class="graph-container"></div>
+    </section>
+  </main>
+
+  <script src="graph.js"></script>
+</body>
+</html>
+
