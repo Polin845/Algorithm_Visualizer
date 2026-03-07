@@ -16,6 +16,7 @@ body {
   flex-direction: column;
 }
 
+/* это стиль для шапки (в html class - header) */
 .header {
   padding: 1rem 2rem;
   background: rgba(15, 23, 42, 0.9);
@@ -34,8 +35,8 @@ body {
 }
 
 .nav {
-  display: flex;
-  flex-wrap: wrap;
+  display: flex; /* для горизонтального расположения ссылок */ 
+  flex-wrap: wrap; /* чтобы ссылки переносились на новую строку при узком экране */
   gap: 0.75rem;
 }
 
@@ -51,6 +52,7 @@ body {
     transform 0.12s ease;
 }
 
+/* эффект при наведении на кнопку!! */
 .nav-link:hover {
   background: rgba(48, 51, 55, 0.9);
   transform: translateY(-1px);
@@ -73,10 +75,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(100, 41, 91, 0.85);
   padding: 1rem 1.5rem;
   border-radius: 0.75rem;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.6);
+  box-shadow: 0 10px 25px rgba(82, 48, 150, 0.6);
 }
 
 .controls-row {
@@ -99,7 +101,7 @@ button {
   font-weight: 600;
   cursor: pointer;
   color: #e5e7eb;
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  background: linear-gradient(135deg, #2563eb, #cbb4c0);
   box-shadow: 0 8px 18px rgba(37, 99, 235, 0.4);
   transition: transform 0.12s ease, box-shadow 0.12s ease,
     opacity 0.12s ease, background 0.12s ease;
@@ -201,6 +203,7 @@ input[type="range"]::-moz-range-thumb {
   align-items: stretch;
 }
 
+/* место где палочки сортируются */
 .array-container {
   width: 100%;
   display: flex;
