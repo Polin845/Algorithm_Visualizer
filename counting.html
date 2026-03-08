@@ -11,30 +11,54 @@
     <h1>Algorithm Visualizer</h1>
     <nav class="nav">
       <a href="graph.html" class="nav-link">Graph Traversals</a>
-      <a href="counting.html" class="nav-link nav-link--active">Counting Sort</a>
+      <a href="counting.html" class="nav-link nav-link--active">Counting Sort (без префиксов)</a>
     </nav>
   </header>
 
   <main class="container">
       <section class="controls" aria-label="Controls">
+        <!-- playback row: pause, steps, reset + speed slider -->
         <div class="controls-row">
-          <button id="generateBtn" class="btn">Generate Array</button>
           <button id="startBtn" class="btn btn-primary">Start Counting Sort</button>
-          <button id="pauseBtn" class="btn" disabled>Pause</button>
-          <button id="resumeBtn" class="btn" disabled>Resume</button>
+          <button id="playPauseBtn" class="btn icon-btn" disabled title="Pause">
+          <svg id="playPauseIcon" viewBox="0 0 24 24">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+          </svg>
+        </button>
         </div>
         <div class="controls-row">
-          <button id="stepBackBtn" class="btn" disabled>Step Backward</button>
-          <button id="stepForwardBtn" class="btn" disabled>Step Forward</button>
-          <button id="resetBtn" class="btn" disabled>Reset</button>
-        </div>
-        <div class="controls-row controls-row-wide">
+          <button id="stepBackBtn" class="btn icon-btn" disabled title="Step Backward">
+          <svg viewBox="0 0 24 24">
+            <polygon points="19,4 9,12 19,20"></polygon>
+            <rect x="5" y="4" width="3" height="16"></rect>
+          </svg>
+        </button>
+
+        <button id="stepForwardBtn" class="btn icon-btn" disabled title="Step Forward">
+          <svg viewBox="0 0 24 24">
+            <polygon points="5,4 15,12 5,20"></polygon>
+            <rect x="16" y="4" width="3" height="16"></rect>
+          </svg>
+        </button>
+
+        <button id="resetBtn" class="btn icon-btn" disabled title="Reset">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"></path>
+          </svg>
+        </button>
+
           <label for="speed" class="label">
             Speed
-            <span id="speedLabel" class="pill" aria-live="polite">Medium</span>
+          <!--<span id="speedLabel" class="pill" aria-live="polite">Medium</span> -->
           </label>
           <input id="speed" type="range" min="1" max="5" step="1" value="3" />
-          <div class="hint">Slower = more time between steps.</div>
+        </div>
+
+        <!-- array generation row: generate button + custom input -->
+        <div class="controls-row">
+          <button id="generateBtn" class="btn">Generate Array</button>
+          <input id="customArray" type="text" placeholder="e.g. 3 1 4 1 5" class="input-array" />
         </div>
       </section>
 
@@ -129,6 +153,13 @@
       </div>
     </footer>
 
-    <script src="./counting.js"></script>
+    <script src="./js/counting_sort/constants.js"></script>
+    <script src="./js/counting_sort/helpers.js"></script>
+    <script src="./js/counting_sort/control_buttons.js"></script>
+    <script src="./js/counting_sort/state.js"></script>
+    <script src="./js/counting_sort/steps.js"></script>
+    <script src="./js/counting_sort/rendering.js"></script>
+    <script src="./js/counting_sort/main.js"></script>
+
   </body>
 </html>
