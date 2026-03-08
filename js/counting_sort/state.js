@@ -27,8 +27,8 @@ function parseCustomInput() {
 
 // always produces a random array
 function generateArray() {
-  const length = randomInt(7, 10);
-  const max = randomInt(8, 12);
+  const length = 15;
+  const max = randomInt(10, 14);
   const arr = Array.from({ length }, () => randomInt(0, max));
 
   input = arr;

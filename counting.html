@@ -17,52 +17,45 @@
 
   <main class="container">
       <section class="controls" aria-label="Controls">
-        <!-- playback row: pause, steps, reset + speed slider -->
-        <div class="controls-row">
+        <!-- playback row: start, pause, steps, reset + speed slider -->
+        <div class="controls-row controls-row-playback">
           <button id="startBtn" class="btn btn-primary">Start Counting Sort</button>
           <button id="playPauseBtn" class="btn icon-btn" disabled title="Pause">
-          <svg id="playPauseIcon" viewBox="0 0 24 24">
-            <rect x="6" y="4" width="4" height="16"></rect>
-            <rect x="14" y="4" width="4" height="16"></rect>
-          </svg>
-        </button>
-        </div>
-        <div class="controls-row">
+            <svg id="playPauseIcon" viewBox="0 0 24 24">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+          </button>
           <button id="stepBackBtn" class="btn icon-btn" disabled title="Step Backward">
-          <svg viewBox="0 0 24 24">
-            <polygon points="19,4 9,12 19,20"></polygon>
-            <rect x="5" y="4" width="3" height="16"></rect>
-          </svg>
-        </button>
-
-        <button id="stepForwardBtn" class="btn icon-btn" disabled title="Step Forward">
-          <svg viewBox="0 0 24 24">
-            <polygon points="5,4 15,12 5,20"></polygon>
-            <rect x="16" y="4" width="3" height="16"></rect>
-          </svg>
-        </button>
-
-        <button id="resetBtn" class="btn icon-btn" disabled title="Reset">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"></path>
-          </svg>
-        </button>
-
-          <label for="speed" class="label">
+            <svg viewBox="0 0 24 24">
+              <polygon points="19,4 9,12 19,20"></polygon>
+              <rect x="5" y="4" width="3" height="16"></rect>
+            </svg>
+          </button>
+          <button id="stepForwardBtn" class="btn icon-btn" disabled title="Step Forward">
+            <svg viewBox="0 0 24 24">
+              <polygon points="5,4 15,12 5,20"></polygon>
+              <rect x="16" y="4" width="3" height="16"></rect>
+            </svg>
+          </button>
+          <button id="resetBtn" class="btn icon-btn" disabled title="Reset">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"></path>
+            </svg>
+          </button>
+          <label for="speed" class="label controls-speed-label">
             Speed
-          <!--<span id="speedLabel" class="pill" aria-live="polite">Medium</span> -->
           </label>
-          <input id="speed" type="range" min="1" max="5" step="1" value="3" />
+          <input id="speed" type="range" min="1" max="5" step="1" value="3" class="controls-speed-slider" />
         </div>
-
         <!-- array generation row: generate button + custom input -->
-        <div class="controls-row">
+        <div class="controls-row controls-row-generate">
           <button id="generateBtn" class="btn">Generate Array</button>
           <input id="customArray" type="text" placeholder="e.g. 3 1 4 1 5" class="input-array" />
         </div>
       </section>
 
-      <section class="panel">
+      <section class="panel panel-viz">
         <div class="panel-header">
           <h2>SECTION 1 — Original Array</h2>
           <div id="phaseBadge" class="phase-badge" aria-live="polite">Ready</div>
@@ -78,7 +71,7 @@
         </div>
       </section>
 
-      <section class="panel">
+      <section class="panel panel-viz">
         <div class="panel-header">
           <h2>SECTION 2 — Count Array</h2>
           <div class="legend">
@@ -86,12 +79,9 @@
               <span class="swatch swatch-active"></span>
               Active index
             </span>
-            <span class="legend-item">
-              <span class="swatch swatch-calc"></span>
-              Prefix sum step
-            </span>
           </div>
         </div>
+        <!--короче паметры viewbox потом все равно заменяются через js-->
         <div class="viz-area">
           <svg
             id="countSvg"
@@ -104,7 +94,7 @@
         <div id="calcLine" class="calc-line" aria-live="polite"></div>
       </section>
 
-      <section class="panel">
+      <section class="panel panel-viz">
         <div class="panel-header">
           <h2>SECTION 3 — Output Array</h2>
           <div class="legend">
@@ -136,12 +126,8 @@
             <strong>Counting:</strong> for each input value <code>x</code>, increment <code>count[x]</code>.
           </li>
           <li>
-            <strong>Prefix sums:</strong> transform counts so <code>count[i]</code> becomes “how many elements are
-            ≤ i”.
-          </li>
-          <li>
-            <strong>Build output:</strong> scan input right-to-left, place each value in its final position using
-            <code>count[value] - 1</code>, then decrement <code>count[value]</code>.
+            <strong>Build output:</strong> iterate values from 0 to max, and write each value <code>v</code> into the output
+            array <code>count[v]</code> times (left-to-right), decrementing <code>count[v]</code> as you place.
           </li>
         </ol>
       </section>

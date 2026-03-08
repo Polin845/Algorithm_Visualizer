@@ -67,51 +67,7 @@ function buildAnimationSteps() {
     });
   }
 
-  // PHASE 2 — Prefix sums
-  pushStep(steps, {
-    inputArray,
-    countArray,
-    outputArray,
-    highlightedInputIndex: null,
-    highlightedCountIndex: null,
-    highlightedOutputIndex: null,
-    phase: "prefix_sum",
-    calcText: "Phase 2: convert counts to prefix sums (how many elements are ≤ each index).",
-    dimInput: false,
-  });
-
-  for (let i = 1; i < countArray.length; i++) {
-    const before = countArray[i];
-    const add = countArray[i - 1];
-    pushStep(steps, {
-      inputArray,
-      countArray,
-      outputArray,
-      highlightedInputIndex: null,
-      highlightedCountIndex: null,
-      highlightedOutputIndex: null,
-      phase: "prefix_sum",
-      calcText: `Compute: <strong>count[${i}]</strong> = <strong>${before}</strong> + <strong>count[${i - 1}]</strong> (${add})`,
-      dimInput: false,
-      calcIndex: i,
-    });
-
-    countArray[i] = before + add;
-    pushStep(steps, {
-      inputArray,
-      countArray,
-      outputArray,
-      highlightedInputIndex: null,
-      highlightedCountIndex: null,
-      highlightedOutputIndex: null,
-      phase: "prefix_sum",
-      calcText: `Updated: <strong>count[${i}]</strong> = <strong>${countArray[i]}</strong>.`,
-      dimInput: false,
-      calcIndex: i,
-    });
-  }
-
-  // PHASE 3 — Building output (stable right-to-left)
+  // PHASE 2 — Build output directly from counts (no prefix sums)
   pushStep(steps, {
     inputArray,
     countArray,
@@ -120,50 +76,55 @@ function buildAnimationSteps() {
     highlightedCountIndex: null,
     highlightedOutputIndex: null,
     phase: "placement",
-    calcText: "Phase 3: build output right-to-left. Place at count[value] - 1, then decrement.",
+    calcText:
+      "Phase 2: build the output array directly from <strong>count</strong>. For each value <strong>v</strong>, write it <strong>count[v]</strong> times into output (left-to-right), decrementing as you go.",
     dimInput: false,
   });
 
-  for (let i = inputArray.length - 1; i >= 0; i--) {
-    const x = inputArray[i];
+  let outPos = 0;
+  for (let v = 0; v < countArray.length; v++) {
     pushStep(steps, {
       inputArray,
       countArray,
       outputArray,
-      highlightedInputIndex: i,
-      highlightedCountIndex: x,
+      highlightedInputIndex: null,
+      highlightedCountIndex: v,
       highlightedOutputIndex: null,
       phase: "placement",
-      calcText: `Take <strong>input[${i}]</strong> = <strong>${x}</strong>. Use <strong>count[${x}]</strong> to find its position.`,
-      dimInput: true,
+      calcText: `Value <strong>${v}</strong>: current <strong>count[${v}]</strong> = <strong>${countArray[v]}</strong>.`,
+      dimInput: false,
     });
 
-    const pos = countArray[x] - 1;
-    pushStep(steps, {
-      inputArray,
-      countArray,
-      outputArray,
-      highlightedInputIndex: i,
-      highlightedCountIndex: x,
-      highlightedOutputIndex: pos,
-      phase: "placement",
-      calcText: `Place <strong>${x}</strong> at output position <strong>${pos}</strong> (because count[${x}] = ${countArray[x]}).`,
-      dimInput: true,
-    });
+    while (countArray[v] > 0) {
+      pushStep(steps, {
+        inputArray,
+        countArray,
+        outputArray,
+        highlightedInputIndex: null,
+        highlightedCountIndex: v,
+        highlightedOutputIndex: outPos,
+        phase: "placement",
+        calcText: `Write <strong>${v}</strong> to <strong>output[${outPos}]</strong>, then decrement <strong>count[${v}]</strong>.`,
+        dimInput: false,
+      });
 
-    outputArray[pos] = x;
-    countArray[x] -= 1;
-    pushStep(steps, {
-      inputArray,
-      countArray,
-      outputArray,
-      highlightedInputIndex: i,
-      highlightedCountIndex: x,
-      highlightedOutputIndex: pos,
-      phase: "placement",
-      calcText: `Placed. Decrement: <strong>count[${x}]</strong> becomes <strong>${countArray[x]}</strong>.`,
-      dimInput: true,
-    });
+      outputArray[outPos] = v;
+      countArray[v] -= 1;
+
+      pushStep(steps, {
+        inputArray,
+        countArray,
+        outputArray,
+        highlightedInputIndex: null,
+        highlightedCountIndex: v,
+        highlightedOutputIndex: outPos,
+        phase: "placement",
+        calcText: `Placed. Now <strong>count[${v}]</strong> = <strong>${countArray[v]}</strong>.`,
+        dimInput: false,
+      });
+
+      outPos += 1;
+    }
   }
 
   pushStep(steps, {
@@ -183,8 +144,7 @@ function buildAnimationSteps() {
 
 function phaseText(phase) {
   if (phase === "counting") return { text: "Phase 1: Counting occurrences", cls: "phase1" };
-  if (phase === "prefix_sum") return { text: "Phase 2: Prefix sums", cls: "phase2" };
-  if (phase === "placement") return { text: "Phase 3: Building output array", cls: "phase3" };
+  if (phase === "placement") return { text: "Phase 2: Building output from count[]", cls: "phase3" };
   if (phase === "done") return { text: "Done — Output is sorted", cls: "done" };
   return { text: "Ready", cls: "" };
 }

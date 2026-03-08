@@ -1,35 +1,33 @@
+// Универсальная функция для автоцентрирования и подгонки высоты SVG
+function setupSvg(svg, W, cellHeight, labelHeight = 18, bottomTextHeight = 22, gapY = 2) {
+  const H = labelHeight + cellHeight + bottomTextHeight + gapY * 2 + 10; // минимальная необходимая высота
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  return labelHeight + gapY; // y-координата верхнего квадрата
+}
+
 function renderInputArray(arr, { activeIndex = null, dimAllExceptActive = false, placedIndex = null } = {}) {
   clearSvg(inputSvg);
-
   const W = 800;
-  const H = 220;
-  const padX = 24;
-  const padTop = 18;
-  const padBottom = 34;
-  const chartH = H - padTop - padBottom;
+  const gap = 6;
+  if (arr.length === 0) return;
+
+  const labelHeight = 18;
+  const bottomTextHeight = 22;
+  const gapY = 2;
 
   const n = arr.length;
-  const gap = 10;
-  const barW = n === 0 ? 0 : (W - padX * 2 - gap * (n - 1)) / n;
-  const max = Math.max(1, ...arr);
-
-  inputSvg.appendChild(
-    el("text", { x: padX, y: 16, fill: "rgba(184,199,238,.95)", "font-size": 12, "font-weight": 650 }, "Value bars")
-  );
+  const cell = (W - 6 * 2 - gap * (n - 1)) / n;
+  const y = setupSvg(inputSvg, W, cell, labelHeight, bottomTextHeight, gapY);
 
   for (let i = 0; i < n; i++) {
-    const v = arr[i];
-    const h = (v / max) * chartH;
-    const x = padX + i * (barW + gap);
-    const y = padTop + (chartH - h);
-
-    const rect = el("rect", { x, y, width: barW, height: h, rx: 10, class: "bar-rect" });
+    const x = 6 + i * (cell + gap);
+    const rect = el("rect", { x, y, width: cell, height: cell, rx: 12, class: "cell-rect" });
     if (dimAllExceptActive && activeIndex !== null && i !== activeIndex) rect.classList.add("dim");
     if (activeIndex !== null && i === activeIndex) rect.classList.add("active");
     if (placedIndex !== null && i === placedIndex) rect.classList.add("placed");
 
-    const text = el("text", { x: x + barW / 2, y: y + Math.max(16, h / 2), class: "bar-text" }, String(v));
-    const idx = el("text", { x: x + barW / 2, y: H - 22, class: "bar-index" }, `i=${i}`);
+    const text = el("text", { x: x + cell / 2, y: y + cell / 2, class: "cell-text" }, String(arr[i]));
+    const idx = el("text", { x: x + cell / 2, y: y + cell + 12, class: "cell-subtext" }, `i=${i}`);
 
     inputSvg.appendChild(rect);
     inputSvg.appendChild(text);
@@ -39,37 +37,27 @@ function renderInputArray(arr, { activeIndex = null, dimAllExceptActive = false,
 
 function renderCountArray(arr, { activeIndex = null, calcIndex = null } = {}) {
   clearSvg(countSvg);
-
   const W = 800;
-  const H = 220;
-  const padX = 18;
-  const padY = 20;
-
+  const gap = 6;
   if (arr.length === 0) return;
 
-  const cols = arr.length;
-  const gap = 8;
-  const cellW = (W - padX * 2 - gap * (cols - 1)) / cols;
-  const cellH = 74;
-  const y = 86;
+  const labelHeight = 18;
+  const bottomTextHeight = 32; // idxLabel + cntLabel + cntVal
+  const gapY = 2;
 
-  countSvg.appendChild(
-    el(
-      "text",
-      { x: padX, y: 18, fill: "rgba(184,199,238,.95)", "font-size": 12, "font-weight": 650 },
-      "Index and count"
-    )
-  );
+  const cols = arr.length;
+  const size = (W - 6 * 2 - gap * (cols - 1)) / cols;
+  const y = setupSvg(countSvg, W, size, labelHeight, bottomTextHeight, gapY);
 
   for (let i = 0; i < cols; i++) {
-    const x = padX + i * (cellW + gap);
-    const rect = el("rect", { x, y, width: cellW, height: cellH, rx: 10, class: "cell-rect" });
+    const x = 6 + i * (size + gap);
+    const rect = el("rect", { x, y, width: size, height: size, rx: 12, class: "cell-rect" });
     if (activeIndex !== null && i === activeIndex) rect.classList.add("active");
     if (calcIndex !== null && i === calcIndex) rect.classList.add("calc");
 
-    const idxLabel = el("text", { x: x + cellW / 2, y: y - 16, class: "cell-subtext" }, `index ${i}`);
-    const cntLabel = el("text", { x: x + cellW / 2, y: y + 28, class: "cell-subtext" }, "count");
-    const cntVal = el("text", { x: x + cellW / 2, y: y + 52, class: "cell-text" }, String(arr[i]));
+    const idxLabel = el("text", { x: x + size / 2, y: y - 16, class: "cell-subtext" }, `index ${i}`);
+    const cntLabel = el("text", { x: x + size / 2, y: y + size + 8, class: "cell-subtext" }, "count");
+    const cntVal = el("text", { x: x + size / 2, y: y + size / 2, class: "cell-text" }, String(arr[i]));
 
     countSvg.appendChild(idxLabel);
     countSvg.appendChild(rect);
@@ -80,37 +68,27 @@ function renderCountArray(arr, { activeIndex = null, calcIndex = null } = {}) {
 
 function renderOutputArray(arr, { placeIndex = null } = {}) {
   clearSvg(outputSvg);
-
   const W = 800;
-  const H = 180;
-  const padX = 18;
-  const padTop = 24;
+  const gap = 6;
+  if (arr.length === 0) return;
+
+  const labelHeight = 18;
+  const bottomTextHeight = 22;
+  const gapY = 2;
 
   const n = arr.length;
-  if (n === 0) return;
-
-  const gap = 10;
-  const cellW = (W - padX * 2 - gap * (n - 1)) / n;
-  const cellH = 80;
-  const y = padTop + 38;
-
-  outputSvg.appendChild(
-    el(
-      "text",
-      { x: padX, y: 22, fill: "rgba(184,199,238,.95)", "font-size": 12, "font-weight": 650 },
-      "Output positions"
-    )
-  );
+  const size = (W - 6 * 2 - gap * (n - 1)) / n;
+  const y = setupSvg(outputSvg, W, size, labelHeight, bottomTextHeight, gapY);
 
   for (let i = 0; i < n; i++) {
-    const x = padX + i * (cellW + gap);
-    const rect = el("rect", { x, y, width: cellW, height: cellH, rx: 12, class: "cell-rect" });
+    const x = 6 + i * (size + gap);
+    const rect = el("rect", { x, y, width: size, height: size, rx: 12, class: "cell-rect" });
     if (placeIndex !== null && i === placeIndex) rect.classList.add("place");
     if (arr[i] !== null) rect.classList.add("filled");
 
-    const idxLabel = el("text", { x: x + cellW / 2, y: y - 14, class: "cell-subtext" }, `pos ${i}`);
+    const idxLabel = el("text", { x: x + size / 2, y: y - 14, class: "cell-subtext" }, `pos ${i}`);
     const val = arr[i] === null ? "" : String(arr[i]);
-    const valText = el("text", { x: x + cellW / 2, y: y + cellH / 2, class: "cell-text" }, val);
+    const valText = el("text", { x: x + size / 2, y: y + size / 2, class: "cell-text" }, val);
 
     outputSvg.appendChild(idxLabel);
     outputSvg.appendChild(rect);
