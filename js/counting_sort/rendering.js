@@ -41,8 +41,8 @@ function renderCountArray(arr, { activeIndex = null, calcIndex = null } = {}) {
   const gap = 6;
   if (arr.length === 0) return;
 
-  const labelHeight = 18;
-  const bottomTextHeight = 32; // idxLabel + cntLabel + cntVal
+  const labelHeight = 0; // убрали верхнюю надпись
+  const bottomTextHeight = 22; // теперь снизу только подписи i=...
   const gapY = 2;
 
   const cols = arr.length;
@@ -55,14 +55,15 @@ function renderCountArray(arr, { activeIndex = null, calcIndex = null } = {}) {
     if (activeIndex !== null && i === activeIndex) rect.classList.add("active");
     if (calcIndex !== null && i === calcIndex) rect.classList.add("calc");
 
-    const idxLabel = el("text", { x: x + size / 2, y: y - 16, class: "cell-subtext" }, `index ${i}`);
-    const cntLabel = el("text", { x: x + size / 2, y: y + size + 8, class: "cell-subtext" }, "count");
+    // снизу надпись i={номер}, как в первой секции
+    const idxLabel = el("text", { x: x + size / 2, y: y + size + 12, class: "cell-subtext" }, `i=${i}`);
+
+    // значение count (само число) остаётся в центре квадрата
     const cntVal = el("text", { x: x + size / 2, y: y + size / 2, class: "cell-text" }, String(arr[i]));
 
-    countSvg.appendChild(idxLabel);
     countSvg.appendChild(rect);
-    countSvg.appendChild(cntLabel);
     countSvg.appendChild(cntVal);
+    countSvg.appendChild(idxLabel);
   }
 }
 
@@ -72,8 +73,8 @@ function renderOutputArray(arr, { placeIndex = null } = {}) {
   const gap = 6;
   if (arr.length === 0) return;
 
-  const labelHeight = 18;
-  const bottomTextHeight = 22;
+  const labelHeight = 0; // убрали верхнюю надпись
+  const bottomTextHeight = 22; // подписи i=... снизу
   const gapY = 2;
 
   const n = arr.length;
@@ -86,13 +87,14 @@ function renderOutputArray(arr, { placeIndex = null } = {}) {
     if (placeIndex !== null && i === placeIndex) rect.classList.add("place");
     if (arr[i] !== null) rect.classList.add("filled");
 
-    const idxLabel = el("text", { x: x + size / 2, y: y - 14, class: "cell-subtext" }, `pos ${i}`);
+    // подпись снизу: i={номер квадрата}
+    const idxLabel = el("text", { x: x + size / 2, y: y + size + 12, class: "cell-subtext" }, `i=${i}`);
     const val = arr[i] === null ? "" : String(arr[i]);
     const valText = el("text", { x: x + size / 2, y: y + size / 2, class: "cell-text" }, val);
 
-    outputSvg.appendChild(idxLabel);
     outputSvg.appendChild(rect);
     outputSvg.appendChild(valText);
+    outputSvg.appendChild(idxLabel);
   }
 }
 
