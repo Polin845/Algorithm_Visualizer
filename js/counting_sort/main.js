@@ -6,40 +6,30 @@ function resetAndRenderFresh() {
   currentStepIndex = 0;
   isPaused = false;
   isRunning = false;
+  // if for some reason input is empty, make a fresh one
+  if (!input || input.length === 0) {
+    console.log("resetAndRenderFresh: input empty, generating new array");
+    generateArray();
+  }
   renderAll(input, count, output);
   updateButtons();
 }
 
 generateBtn.addEventListener("click", () => {
-  if (isRunning && !isPaused) return;
+  // if array playback is in progress, cancel it and ...
+  playbackRunId += 1; // abort any running loop
+  isPaused = false;
+  isRunning = false;
+
   generateArray();
   resetAndRenderFresh();
+
+  // ensure play/pause button shows resume state since nothing is playing yet
+  setPlayIcon();
+  playPauseBtn.title = "Resume";
 });
 
-startBtn.addEventListener("click", () => {
-  if (isRunning && !isPaused) return;
-  // apply custom input if provided; otherwise keep whatever array is current
-  const custom = parseCustomInput();
-  if (custom) {
-    input = custom.slice();
-    maxValue = Math.max(...input);
-    count = Array.from({ length: maxValue + 1 }, () => 0);
-    output = Array.from({ length: input.length }, () => null);
-    resetAndRenderFresh(); // show the custom array immediately
-    setPauseIcon();
-  playPauseBtn.title = "Pause";
-  }
-  // Restart cleanly (also cancels any paused autoplay loop).
-  playbackRunId += 1;
-  isRunning = false;
-  isPaused = false;
 
-  // Build full state history, then start playback.
-  animationSteps = buildAnimationSteps();
-  currentStepIndex = 0;
-  renderStep(animationSteps[0]);
-  playFromCurrent();
-});
 
 speedSlider.addEventListener("input", () => {
   setSpeedLabel();
@@ -63,7 +53,15 @@ resetBtn.addEventListener("click", () => {
   resetPlaybackToStart();
 });
 
-// Initial load
-setSpeedLabel();
-generateArray();
-resetAndRenderFresh();
+// Initial load – run immediately if DOM is ready, otherwise wait
+function initialize() {
+  setSpeedLabel();
+  generateArray();
+  resetAndRenderFresh();
+}
+
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", initialize);
+} else {
+  initialize();
+}

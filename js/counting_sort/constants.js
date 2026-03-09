@@ -3,7 +3,6 @@ const countSvg = document.getElementById("countSvg");
 const outputSvg = document.getElementById("outputSvg");
 
 const generateBtn = document.getElementById("generateBtn");
-const startBtn = document.getElementById("startBtn");
 const playPauseBtn = document.getElementById("playPauseBtn");
 const playPauseIcon = document.getElementById("playPauseIcon");
 const stepForwardBtn = document.getElementById("stepForwardBtn");

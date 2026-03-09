@@ -19,17 +19,15 @@
       <section class="controls" aria-label="Controls">
         <!-- playback row: start, pause, steps, reset + speed slider -->
         <div class="controls-row controls-row-playback">
-          <button id="startBtn" class="btn btn-primary">Start Counting Sort</button>
-          <button id="playPauseBtn" class="btn icon-btn" disabled title="Pause">
-            <svg id="playPauseIcon" viewBox="0 0 24 24">
-              <rect x="6" y="4" width="4" height="16"></rect>
-              <rect x="14" y="4" width="4" height="16"></rect>
-            </svg>
-          </button>
           <button id="stepBackBtn" class="btn icon-btn" disabled title="Step Backward">
             <svg viewBox="0 0 24 24">
               <polygon points="19,4 9,12 19,20"></polygon>
               <rect x="5" y="4" width="3" height="16"></rect>
+            </svg>
+          </button>
+          <button id="playPauseBtn" class="btn icon-btn" title="Resume">
+            <svg id="playPauseIcon" viewBox="0 0 24 24">
+              <polygon points="6,4 20,12 6,20"></polygon>
             </svg>
           </button>
           <button id="stepForwardBtn" class="btn icon-btn" disabled title="Step Forward">
@@ -44,7 +42,8 @@
             </svg>
           </button>
           <label for="speed" class="label controls-speed-label">
-            Speed
+            Speed:
+            <span id="speedLabel" class="speed-label-text">250 ms</span>
           </label>
           <input id="speed" type="range" min="1" max="5" step="1" value="3" class="controls-speed-slider" />
         </div>
@@ -57,7 +56,7 @@
 
       <section class="panel panel-viz">
         <div class="panel-header">
-          <h2>SECTION 1 — Original Array</h2>
+          <h2>Original Array</h2>
           <div id="phaseBadge" class="phase-badge" aria-live="polite">Ready</div>
         </div>
         <div class="viz-area">
@@ -73,7 +72,7 @@
 
       <section class="panel panel-viz">
         <div class="panel-header">
-          <h2>SECTION 2 — Count Array</h2>
+          <h2>Count Array</h2>
           <div class="legend">
             <span class="legend-item">
               <span class="swatch swatch-active"></span>
@@ -96,7 +95,7 @@
 
       <section class="panel panel-viz">
         <div class="panel-header">
-          <h2>SECTION 3 — Output Array</h2>
+          <h2>Output Array</h2>
           <div class="legend">
             <span class="legend-item">
               <span class="swatch swatch-place"></span>

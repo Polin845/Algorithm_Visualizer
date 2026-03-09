@@ -220,6 +220,8 @@ function resetPlaybackToStart() {
   isRunning = false;
   currentStepIndex = 0;
   if (animationSteps.length > 0) renderStep(animationSteps[0]);
+  setPlayIcon();
+  playPauseBtn.title = "Resume";
   updateButtons();
 }
 
@@ -229,13 +231,13 @@ function updateButtons() {
   const atStart = currentStepIndex <= 0;
   const atEnd = hasSteps && currentStepIndex >= animationSteps.length - 1;
 
-  playPauseBtn.disabled = !hasSteps || atEnd;
+  playPauseBtn.disabled = hasSteps && atEnd;
 
   stepBackBtn.disabled = !hasSteps || atStart;
   stepForwardBtn.disabled = !hasSteps || atEnd;
 
   resetBtn.disabled = !hasSteps;
 
-  generateBtn.disabled = isRunning && !isPaused;
-  startBtn.disabled = isRunning && !isPaused;
+  // generate button should always be available so user can abort current run
+  generateBtn.disabled = false;
 }

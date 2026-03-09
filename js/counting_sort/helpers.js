@@ -8,6 +8,11 @@ function getDelayMs() {
   return SPEED_MS_BY_LEVEL[Number(speedSlider.value)] ?? 350;
 }
 
+// update text next to speed slider
+function setSpeedLabel() {
+  speedLabel.textContent = `${getDelayMs()} ms`;
+}
+
 function setPhase(text, cssClass) {
   phaseBadge.textContent = text;
   phaseBadge.className = "phase-badge";
