@@ -202,6 +202,52 @@ input[type="range"]{
   background: rgba(79,124,255,.28);
 }
 
+.plus-one-float {
+  position: fixed;
+  color: #ffaa00;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 0 5px black, 0 0 10px rgba(255, 170, 0, 0.5);
+  pointer-events: none;
+  z-index: 9999;
+  animation: float-down 0.5s linear forwards;
+}
+
+@keyframes float-down {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(25px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+}
+
+/* Эффект пульсации при изменении числа */
+.cell-text.highlight {
+  animation: pulse 0.3s ease-out;
+  fill: #ffaa00 !important;
+  font-weight: bold;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+    fill: #ffaa00;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .panel{
   background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
   border: 1px solid var(--border);

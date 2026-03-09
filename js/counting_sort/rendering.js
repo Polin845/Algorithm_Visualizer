@@ -35,14 +35,25 @@ function renderInputArray(arr, { activeIndex = null, dimAllExceptActive = false,
   }
 }
 
-function renderCountArray(arr, { activeIndex = null, calcIndex = null } = {}) {
+function renderCountArray(arr, { activeIndex = null, calcIndex = null, incrementIndex = null } = {}) {
+  console.log("renderCountArray", { incrementIndex, arr: arr.slice() });
+  
+  // Сохраняем старые значения для анимации
+  const oldValues = {};
+  const oldTexts = countSvg.querySelectorAll('.cell-text');
+  oldTexts.forEach((text, idx) => {
+    oldValues[idx] = text.textContent;
+  });
+  
+  // Очищаем основной массив
   clearSvg(countSvg);
+
   const W = 800;
   const gap = 6;
   if (arr.length === 0) return;
 
-  const labelHeight = 0; // убрали верхнюю надпись
-  const bottomTextHeight = 22; // теперь снизу только подписи i=...
+  const labelHeight = 0;
+  const bottomTextHeight = 22;
   const gapY = 2;
 
   const cols = arr.length;
@@ -52,18 +63,37 @@ function renderCountArray(arr, { activeIndex = null, calcIndex = null } = {}) {
   for (let i = 0; i < cols; i++) {
     const x = 6 + i * (size + gap);
     const rect = el("rect", { x, y, width: size, height: size, rx: 12, class: "cell-rect" });
+
     if (activeIndex !== null && i === activeIndex) rect.classList.add("active");
     if (calcIndex !== null && i === calcIndex) rect.classList.add("calc");
 
-    // снизу надпись i={номер}, как в первой секции
     const idxLabel = el("text", { x: x + size / 2, y: y + size + 12, class: "cell-subtext" }, `i=${i}`);
-
-    // значение count (само число) остаётся в центре квадрата
-    const cntVal = el("text", { x: x + size / 2, y: y + size / 2, class: "cell-text" }, String(arr[i]));
-
+    
+    // Используем СТАРОЕ значение, если оно есть
+    let displayValue = String(arr[i]);
+    if (incrementIndex !== null && i === incrementIndex) {
+      // Для индекса, который инкрементится, показываем СТАРОЕ значение
+      displayValue = oldValues[i] || String(arr[i] - 1);
+    } else {
+      displayValue = String(arr[i]);
+    }
+    
+    const cntVal = el("text", { x: x + size / 2, y: y + size / 2, class: "cell-text" }, displayValue);
+    
     countSvg.appendChild(rect);
     countSvg.appendChild(cntVal);
     countSvg.appendChild(idxLabel);
+  }
+  
+  // Если есть incrementIndex, показываем анимацию
+  if (incrementIndex !== null) {
+    const newValue = arr[incrementIndex];
+    console.log("Starting animation for incrementIndex:", incrementIndex, "newValue:", newValue);
+    
+    // Небольшая задержка, чтобы убедиться, что DOM обновился
+    setTimeout(() => {
+      showFloatingPlus(incrementIndex, newValue);
+    }, 50);
   }
 }
 
@@ -102,9 +132,9 @@ function renderAll(
   inputArr,
   countArr,
   outputArr,
-  { inputActive = null, dimInput = false, countActive = null, countCalc = null, outputPlace = null } = {}
+  { inputActive = null, dimInput = false, countActive = null, countCalc = null, countIncrement = null, outputPlace = null } = {}
 ) {
   renderInputArray(inputArr, { activeIndex: inputActive, dimAllExceptActive: dimInput });
-  renderCountArray(countArr, { activeIndex: countActive, calcIndex: countCalc });
+  renderCountArray(countArr, { activeIndex: countActive, calcIndex: countCalc, incrementIndex: countIncrement });
   renderOutputArray(outputArr, { placeIndex: outputPlace });
 }

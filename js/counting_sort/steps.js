@@ -4,6 +4,11 @@ function cloneArray(a) {
 
 //то есть эта функция записывает текщее состояние алгоритма в массив steps
 function pushStep(steps, step) {
+   // ВРЕМЕННО: для отладки
+  if (step.countIncrementIndex !== undefined && step.countIncrementIndex !== null) {
+    console.log("Step with increment:", step.countIncrementIndex, "countArray:", step.countArray);
+  }
+  
   steps.push({
     inputArray: cloneArray(step.inputArray),
     countArray: cloneArray(step.countArray),
@@ -15,6 +20,7 @@ function pushStep(steps, step) {
     phase: step.phase,
     calcText: step.calcText ?? "",
     dimInput: Boolean(step.dimInput),
+    countIncrementIndex: step.countIncrementIndex ?? null,
   });
 }
 
@@ -38,34 +44,53 @@ function buildAnimationSteps() {
   });
 
   // PHASE 1 - подсчет вхождений каждого значения
-  
-  for (let i = 0; i < inputArray.length; i++) {
-    const x = inputArray[i]; // текущее значения входного массива
-    pushStep(steps, {
-      inputArray,
-      countArray,
-      outputArray,
-      highlightedInputIndex: i,
-      highlightedCountIndex: x,
-      highlightedOutputIndex: null,
-      phase: "counting",
-      calcText: `Read <strong>input[${i}]</strong> = <strong>${x}</strong>. Increment <strong>count[${x}]</strong>.`,
-      dimInput: true,
-    });
 
-    countArray[x] += 1;
-    pushStep(steps, {
-      inputArray,
-      countArray,
-      outputArray,
-      highlightedInputIndex: i,
-      highlightedCountIndex: x,
-      highlightedOutputIndex: null,
-      phase: "counting",
-      calcText: `Incremented: <strong>count[${x}]</strong> is now <strong>${countArray[x]}</strong>.`,
-      dimInput: true,
-    });
-  }
+for (let i = 0; i < inputArray.length; i++) {
+  const x = inputArray[i]; // текущее значение входного массива
+
+  // шаг 1 — читаем элемент input
+  pushStep(steps, {
+    inputArray,
+    countArray,
+    outputArray,
+    highlightedInputIndex: i,
+    highlightedCountIndex: x,
+    highlightedOutputIndex: null,
+    phase: "counting",
+    calcText: `Read <strong>input[${i}]</strong> = <strong>${x}</strong>.`,
+    dimInput: true,
+  });
+
+  // шаг 2 — показываем +1 (но число ещё не увеличиваем)
+  pushStep(steps, {
+    inputArray,
+    countArray,
+    outputArray,
+    highlightedInputIndex: i,
+    highlightedCountIndex: x,
+    highlightedOutputIndex: null,
+    countIncrementIndex: x,
+    phase: "counting",
+    calcText: `Prepare to increment <strong>count[${x}]</strong>.`,
+    dimInput: true,
+  });
+
+  // теперь реально увеличиваем число
+  countArray[x] += 1;
+
+  // шаг 3 — показываем новое значение
+  pushStep(steps, {
+    inputArray,
+    countArray,
+    outputArray,
+    highlightedInputIndex: i,
+    highlightedCountIndex: x,
+    highlightedOutputIndex: null,
+    phase: "counting",
+    calcText: `Incremented: <strong>count[${x}]</strong> is now <strong>${countArray[x]}</strong>.`,
+    dimInput: true,
+  });
+}
 
   // PHASE 2 — Build output directly from counts (no prefix sums)
   pushStep(steps, {
@@ -162,6 +187,7 @@ function renderStep(step) {
     dimInput: step.dimInput,
     countActive: step.highlightedCountIndex,
     countCalc: countCalcIndex,
+    countIncrement: step.countIncrementIndex,
     outputPlace: step.highlightedOutputIndex,
   });
 
