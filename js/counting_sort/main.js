@@ -29,6 +29,23 @@ generateBtn.addEventListener("click", () => {
   playPauseBtn.title = "Resume";
 });
 
+// custom input: pressing Enter should parse and render the typed array
+const customInputEl = document.getElementById("customArray");
+customInputEl.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const custom = parseCustomInput();
+    if (custom) {
+      input = custom.slice();
+      maxValue = Math.max(...input);
+      count = Array.from({ length: maxValue + 1 }, () => 0);
+      output = Array.from({ length: input.length }, () => null);
+      resetAndRenderFresh();
+      setPlayIcon();
+      playPauseBtn.title = "Resume";
+    }
+  }
+});
+
 
 
 speedSlider.addEventListener("input", () => {
