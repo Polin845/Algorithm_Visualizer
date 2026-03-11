@@ -1,0 +1,131 @@
+class Dijkstra {
+  constructor(G, s) {
+
+    const V = G.V();
+    //-----
+    this.steps = []; //для записи состояния
+    //----
+    this.dist = new Array(V).fill(Infinity);
+    this.pred = new Array(V).fill(null);
+
+    const marked = new Array(V).fill(false);
+
+    const pq = new MinPQplus(); //очередь!
+
+    this.dist[s] = 0;
+    pq.put(this.dist[s], s);
+
+    //----снимок инициализиции
+    this.pushStep({
+    type: "init",
+    start: s
+    });
+    //---------
+
+    while (!pq.isEmpty()) {
+
+      const v = pq.delMin();
+
+      //----выбор вершины
+      this.pushStep({
+      type: "select_vertex",
+      vertex: v
+      });
+      //-------
+
+      if (marked[v]) continue;
+
+      marked[v] = true;
+
+      //----посещение вершины
+      this.pushStep({
+      type: "visit_vertex",
+      vertex: v
+      }); 
+      //-------
+
+      for (const e of G.adjList(v)) {
+
+        const w = e.to();
+
+        //----рассмотрение ребра
+        this.pushStep({
+          type: "check_edge",
+          from: v,
+          to: w,
+          weight: e.weight()
+        });
+        //---------
+
+        if (this.dist[w] > this.dist[v] + e.weight()) {
+
+          this.dist[w] = this.dist[v] + e.weight();
+          this.pred[w] = e;
+
+          //-----расслабление
+          this.pushStep({
+            type: "relax_edge",
+            from: v,
+            to: w,
+            newDist: this.dist[w]
+          });
+          //-------
+
+          pq.insert(this.dist[w], w);
+
+          //----добавление в очередь
+          this.pushStep({
+            type: "push_queue",
+            vertex: w,
+            priority: this.dist[w]
+          });
+          //------
+        }
+      }
+    }
+    //-----конец
+    this.pushStep({
+    type: "finish"
+    });
+    //------
+  }
+  pushStep(state) { //метод для записи состояния
+  this.steps.push({
+    ...state,
+    dist: [...this.dist],
+    pred: [...this.pred]
+  });
+  } 
+}
+
+generateGraphBtn.addEventListener("click", () => {
+   somefunc();
+});
+
+
+//------------временно!! проверка----------
+let player;
+
+function somefunc(){
+  const g = new WeightedGraph(5);
+  g.addEdge(new Edge(0,1,2));
+  g.addEdge(new Edge(0,2,4));
+  g.addEdge(new Edge(1,2,1));
+  g.addEdge(new Edge(1,3,7));
+  g.addEdge(new Edge(2,4,3));
+  g.addEdge(new Edge(4,3,2));
+
+  const d = new Dijkstra(g, 0);
+  const renderer = new Renderer();
+  player = new StepPlayer(d.steps, renderer);
+  console.log("nfdfopdjopfjsf0j");
+
+}
+
+nextBtn.addEventListener("click", () => {
+  player.next();
+});
+
+prevBtn.addEventListener("click", () => {
+  player.prev();
+});

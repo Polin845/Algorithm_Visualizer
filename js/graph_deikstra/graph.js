@@ -6,8 +6,8 @@ let isTraversing = false;
 
 const graphContainer = document.getElementById("graphContainer");
 const generateGraphBtn = document.getElementById("generateGraphBtn");
-const startBfsBtn = document.getElementById("startBfsBtn");
-const startDfsBtn = document.getElementById("startDfsBtn");
+const nextBtn = document.getElementById("next");
+const prevBtn = document.getElementById("prev");
 const graphSpeedRange = document.getElementById("graphSpeedRange");
 const graphSpeedLabel = document.getElementById("graphSpeedLabel");
 
