@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algorithm Visualizer - Counting Sort</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/algorithms/counting.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Algorithm Visualizer</h1>
+    <div class="nav-container"></div>
+  </header>
+
+  <main class="main">
+    <!-- Контролы воспроизведения будут вставлены сюда через JS -->
+    <section id="playback-section"></section>
+
+    <!-- Специфичные контролы для Counting Sort -->
+    <section class="controls-row algorithm-controls">
+      <button id="generateBtn" class="btn">Generate Array</button>
+      <input id="customArray" type="text" 
+             placeholder="e.g. 3 1 4 1 5" 
+             class="input-field">
+    </section>
+
+    <!-- Визуализация -->
+    <div class="viz-grid">
+      <section class="panel panel-viz">
+        <div class="panel-header">
+          <h2>Original Array</h2>
+          <div id="phaseBadge" class="phase-badge">Ready</div>
+        </div>
+        <div class="viz-area">
+          <svg id="inputSvg" class="viz-svg" viewBox="0 0 800 220"></svg>
+        </div>
+      </section>
+
+      <section class="panel panel-viz">
+        <div class="panel-header">
+          <h2>Count Array</h2>
+          <div class="legend">
+            <span class="legend-item">
+              <span class="swatch swatch-active"></span> Active
+            </span>
+          </div>
+        </div>
+        <div class="viz-area">
+          <svg id="countSvg" class="viz-svg" viewBox="0 0 800 220"></svg>
+        </div>
+        <div id="calcLine" class="calc-line"></div>
+      </section>
+
+      <section class="panel panel-viz">
+        <div class="panel-header">
+          <h2>Output Array</h2>
+          <div class="legend">
+            <span class="legend-item">
+              <span class="swatch swatch-place"></span> Target
+            </span>
+            <span class="legend-item">
+              <span class="swatch swatch-filled"></span> Filled
+            </span>
+          </div>
+        </div>
+        <div class="viz-area">
+          <svg id="outputSvg" class="viz-svg" viewBox="0 0 800 180"></svg>
+        </div>
+      </section>
+    </div>
+
+    <!-- Пояснения -->
+    <section class="explanation-panel">
+      <h2>How Counting Sort Works</h2>
+      <ol class="notes">
+        <li><strong>Count:</strong> For each value <code>x</code>, increment <code>count[x]</code></li>
+        <li><strong>Build output:</strong> Write each value <code>v</code> into output <code>count[v]</code> times</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      Tip: Start with slower speed to see each step clearly
+    </div>
+  </footer>
+
+  <!-- Скрипты -->
+  <!-- Сначала core -->
+  <script src="../js/core/playback-controls.js"></script>
+  <script src="../js/core/navigation.js"></script>
+
+  <!-- Потом constants и helpers (базовые функции) -->
+  <script src="../js/algorithms/counting/constants.js"></script>
+  <script src="../js/algorithms/counting/helpers.js"></script>
+
+  <!-- Потом state (состояние) -->
+  <script src="../js/algorithms/counting/state.js"></script>
+
+  <!-- Потом rendering и steps (зависят от constants и state) -->
+  <script src="../js/algorithms/counting/rendering.js"></script>
+  <script src="../js/algorithms/counting/steps.js"></script>
+
+  <!-- И только потом main.js -->
+  <script src="../js/algorithms/counting/main.js"></script>
+</body>
+</html>
