@@ -203,6 +203,13 @@ input[type="range"]::-moz-range-thumb {
   align-items: stretch;
 }
 
+circle {
+  transition: fill 0.3s;
+}
+
+line {
+  transition: stroke 0.3s, stroke-width 0.3s;
+}
 
 /* Graph visualizer */
 .graph-container {

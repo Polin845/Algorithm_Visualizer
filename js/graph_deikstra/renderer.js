@@ -106,7 +106,10 @@ drawNodes(){
       "circle"
     );
 
-    circle.setAttribute("r", 22);
+    circle.setAttribute("cx", pos.x);
+    circle.setAttribute("cy", pos.y);
+
+    circle.setAttribute("r", 20);
     circle.setAttribute("fill", "#7ec8ff");
     circle.setAttribute("stroke", "#1f4e79");
     circle.setAttribute("stroke-width", "2");
@@ -125,6 +128,11 @@ drawNodes(){
     label.setAttribute("font-family", "Arial");
     label.setAttribute("font-weight", "bold");
     label.setAttribute("fill", "#c03d3d");
+
+    //для центрования надписи
+    label.setAttribute("dominant-baseline", "middle");
+    label.setAttribute("text-anchor", "middle");
+    label.setAttribute("y", pos.y);
 
     label.textContent = v;
 
