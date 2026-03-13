@@ -17,6 +17,17 @@
 
   --danger: #fb7185;
   --shadow: 0 16px 40px rgba(0,0,0,.35);
+
+ --node-default:#1f2937;
+  --node-border:#38bdf8;
+
+  --node-active:#f97316;
+  --node-visited:#22c55e;
+}
+
+/* для приглушения */
+.dim{
+  opacity:.35;
 }
 
 /* базовые стили */
@@ -287,3 +298,28 @@ input[type="range"]{
   color: #d8e5ff;
 }
 /*---------*/
+/* легенда */
+.legend{
+  display:flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items:center;
+  color: var(--muted);
+  font-size: 12px;
+}
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+}
+/*что-то от легенды осталось*/
+.swatch{
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.swatch-active{ background: rgba(255,204,102,.85); }
+.swatch-calc{ background: rgba(167,139,250,.85); }
+.swatch-place{ background: rgba(52,211,153,.85); }
+.swatch-filled{ background: rgba(96,165,250,.85); }
