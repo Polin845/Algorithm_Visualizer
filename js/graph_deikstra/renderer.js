@@ -90,7 +90,43 @@ drawEdges(){
 
       this.svg.appendChild(line);
 
-      this.edgeElements.push({line, from:e.from, to:e.to()});
+      //----вес ребра----
+
+      const midX = (from.x + to.x) / 2;
+      const midY = (from.y + to.y) / 2;
+
+      const weightLabel = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "text"
+      );
+
+      weightLabel.setAttribute("x", midX);
+      weightLabel.setAttribute("y", midY - 5);
+
+      weightLabel.setAttribute("text-anchor", "middle");
+      weightLabel.setAttribute("font-size", "14");
+      weightLabel.setAttribute("font-family", "Arial");
+      weightLabel.setAttribute("font-weight", "bold");
+      weightLabel.setAttribute("fill", "#1a1a1a");
+
+      //для лучшей читаемости - обводка
+      weightLabel.setAttribute("stroke", "white");
+      weightLabel.setAttribute("stroke-width", "1"); //надо подумать какое значение тут
+      weightLabel.setAttribute("paint-order", "stroke");
+
+
+      weightLabel.textContent = e.weight();
+
+      this.svg.appendChild(weightLabel);
+
+      //сохраняем для подсветки
+
+      this.edgeElements.push({
+        line: line,
+        label: weightLabel,
+        from: e.from,
+        to: e.to()
+      });
     }
   }
 }
@@ -109,7 +145,7 @@ drawNodes(){
     circle.setAttribute("cx", pos.x);
     circle.setAttribute("cy", pos.y);
 
-    circle.setAttribute("r", 20);
+    circle.setAttribute("r", 13);
     circle.setAttribute("fill", "#7ec8ff");
     circle.setAttribute("stroke", "#1f4e79");
     circle.setAttribute("stroke-width", "2");

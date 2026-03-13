@@ -107,7 +107,7 @@ generateGraphBtn.addEventListener("click", () => {
 let player;
 
 function somefunc(){
-  const g = new WeightedGraph(10);
+  const g = new WeightedGraph(15);
   g.addEdge(new Edge(0,1,2));
   g.addEdge(new Edge(0,2,4));
   g.addEdge(new Edge(1,2,1));
