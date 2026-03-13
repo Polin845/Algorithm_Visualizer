@@ -107,16 +107,26 @@ generateGraphBtn.addEventListener("click", () => {
 let player;
 
 function somefunc(){
-  const g = new WeightedGraph(5);
+  const g = new WeightedGraph(10);
   g.addEdge(new Edge(0,1,2));
   g.addEdge(new Edge(0,2,4));
   g.addEdge(new Edge(1,2,1));
   g.addEdge(new Edge(1,3,7));
   g.addEdge(new Edge(2,4,3));
   g.addEdge(new Edge(4,3,2));
+  g.addEdge(new Edge(4,5,7));
+  g.addEdge(new Edge(5,6,2));
+
+  const width = 600;
+  const height = 400;
+  const nodePositions = generateCircleLayout(
+    g.V(),
+    width,
+    height
+  );
 
   const d = new Dijkstra(g, 0);
-  const renderer = new Renderer();
+  const renderer = new Renderer(g, nodePositions);
   player = new StepPlayer(d.steps, renderer);
   console.log("nfdfopdjopfjsf0j");
 
