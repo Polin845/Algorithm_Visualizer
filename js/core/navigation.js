@@ -1,14 +1,9 @@
-/**
- * Управление навигацией между алгоритмами
- * Автоматически определяет текущую страницу и подсвечивает активную ссылку
- */
-
 class NavigationManager {
   constructor() {
     this.algorithms = [
-      { name: 'Graph Traversals', path: 'pages/graph.html', icon: '🔍' },
-      { name: 'Counting Sort', path: 'pages/counting.html', icon: '📊' },
-      { name: 'Ford-Fulkerson', path: 'pages/ford-fulkerson.html', icon: '🌊' }
+      { name: 'Graph Traversals', path: 'graph.html', icon: '🔍' },
+      { name: 'Counting Sort', path: 'counting.html', icon: '📊' },
+      { name: 'Ford-Fulkerson', path: 'ford-fulkerson.html', icon: '🌊' }
     ];
     
     this.currentPath = this.getCurrentPage();
@@ -16,6 +11,7 @@ class NavigationManager {
 
   getCurrentPage() {
     const path = window.location.pathname;
+    // Получаем только имя файла
     return path.split('/').pop() || 'index.html';
   }
 
@@ -23,14 +19,26 @@ class NavigationManager {
     const nav = document.createElement('nav');
     nav.className = 'nav';
     
+    // Определяем, в какой папке мы находимся
+    const isInPages = window.location.pathname.includes('/pages/');
+    
     this.algorithms.forEach(algo => {
       const link = document.createElement('a');
-      link.href = algo.path;
+      
+      // Формируем правильный путь в зависимости от текущей папки
+      if (isInPages) {
+        // Если мы уже в папке pages, то ссылка просто на файл
+        link.href = algo.path;
+      } else {
+        // Если мы в корне, то добавляем pages/
+        link.href = `pages/${algo.path}`;
+      }
+      
       link.className = 'nav-link';
       link.innerHTML = `${algo.icon} ${algo.name}`;
       
-      // Проверяем, содержит ли текущий путь название файла
-      if (this.currentPath.includes(algo.path.replace('pages/', ''))) {
+      // Проверяем активность
+      if (this.currentPath === algo.path) {
         link.classList.add('nav-link--active');
       }
       

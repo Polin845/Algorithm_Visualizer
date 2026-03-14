@@ -51,6 +51,11 @@ body {
   background-clip: text;
 }
 
+.nav-container {
+    display: flex;
+    align-items: center;
+}
+
 .nav {
   display: flex;
   flex-wrap: wrap;
