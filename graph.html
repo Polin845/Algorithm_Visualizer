@@ -16,7 +16,8 @@
     </nav>
   </header>
 
-    <section class="controls" aria-label="Controls">
+  <main class="container">
+     <section class="controls" aria-label="Controls">
         <!-- playback row: start, pause, steps, reset + speed slider -->
         <div class="controls-row controls-row-playback">
           <button id="prevBtn" class="btn icon-btn" disabled title="Step Backward">
@@ -41,21 +42,16 @@
               <path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"></path>
             </svg>
           </button>
-          <label for="graphSpeedRange" class="graphSpeedRange">
-            Speed:
-            <span id="graphSpeedLabel" class="speed-label-text">250 ms</span>
+          <label for="speed" class="label controls-speed-label">            Speed:
+          <span id="speedLabel" class="speed-label-text">250 ms</span>
           </label>
-          <input id="graphSpeedRange" type="range" min="1" max="5" step="1" value="3" class="controls-speed-slider" />
-        </div>
+          <input id="speed" type="range" min="1" max="5" step="1" value="3" class="controls-speed-slider" />        </div>
         <!-- array generation row: generate button + custom input -->
         <div class="controls-row controls-row-generate">
           <button id="generateGraphBtn" class="btn">Generate Graph</button>
           <input id="customArray" type="text" placeholder="e.g. 3 1 4 1 5" class="input-text" />
         </div>
       </section>
-
-    <div class="container">
-
   <section class="panel panel-viz">
 
     <div class="panel-header">
@@ -83,8 +79,8 @@
     </div>
 
   </section>
+  </main>
 
-</div>
 
   <script src="js/graph_deikstra/structures.js"></script>
   <script src="js/graph_deikstra/min_heap.js"></script>

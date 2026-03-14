@@ -8,8 +8,8 @@ const graphContainer = document.getElementById("graphContainer");
 const generateGraphBtn = document.getElementById("generateGraphBtn");
 const nextBtn = document.getElementById("next");
 const prevBtn = document.getElementById("prev");
-const graphSpeedRange = document.getElementById("graphSpeedRange");
-const graphSpeedLabel = document.getElementById("graphSpeedLabel");
+const speedRange = document.getElementById("speed");
+const speedLabel = document.getElementById("speedLabel");
 
 let svgElement = null;
 let nodeElements = [];
