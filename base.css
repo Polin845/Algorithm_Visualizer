@@ -140,6 +140,18 @@ code{ color: #dbeafe; }
 .panel-viz .panel-header{
   padding: 2px 6px 4px;
 }
+.panel-state .state-content{
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.state-block h3{
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  color: #9fb3ff;
+}
 .panel-notes{
   background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
 }

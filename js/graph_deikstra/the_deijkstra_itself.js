@@ -1,6 +1,6 @@
 class Dijkstra {
+  
   constructor(G, s) {
-
     const V = G.V();
     //-----
     this.steps = []; //для записи состояния
@@ -10,10 +10,10 @@ class Dijkstra {
 
     const marked = new Array(V).fill(false);
 
-    const pq = new MinPQplus(); //очередь!
+    this.pq = new MinPQplus(); // очередь
 
     this.dist[s] = 0;
-    pq.put(this.dist[s], s);
+    this.pq.put(this.dist[s], s);
 
     //----снимок инициализиции
     this.pushStep({
@@ -22,15 +22,15 @@ class Dijkstra {
     });
     //---------
 
-    while (!pq.isEmpty()) {
+    while (!this.pq.isEmpty()) {
 
-      const v = pq.delMin();
+      const v = this.pq.delMin();
 
       //----выбор вершины
       this.pushStep({
       type: "select_vertex",
       vertex: v
-      });
+    });
       //-------
 
       if (marked[v]) continue;
@@ -67,11 +67,12 @@ class Dijkstra {
             type: "relax_edge",
             from: v,
             to: w,
-            newDist: this.dist[w]
+            newDist: this.dist[w],
+            updatedVertex: w
           });
           //-------
 
-          pq.insert(this.dist[w], w);
+          this.pq.insert(this.dist[w], w);
 
           //----добавление в очередь
           this.pushStep({
@@ -93,7 +94,8 @@ class Dijkstra {
   this.steps.push({
     ...state,
     dist: [...this.dist],
-    pred: [...this.pred]
+    pred: [...this.pred],
+    queue: this.pq ? this.pq.toArray() : []
   });
   } 
 }
@@ -127,7 +129,8 @@ function somefunc(){
 
   const d = new Dijkstra(g, 0);
   const renderer = new Renderer(g, nodePositions);
-  player = new StepPlayer(d.steps, renderer);
+  const statePanel = new StatePanel();
+  player = new StepPlayer(d.steps, renderer, statePanel);
   console.log("nfdfopdjopfjsf0j");
 
 }

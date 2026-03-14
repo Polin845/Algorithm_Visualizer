@@ -254,3 +254,106 @@ function generateCircleLayout(n, width, height) {
   return positions;
 }
 
+// -------------рендер панелия состояния----------------
+
+class StatePanel {
+
+  constructor() {
+    this.currentVertexEl = document.getElementById("currentVertex");
+    this.distancesEl = document.getElementById("distances");
+    this.queueEl = document.getElementById("queue");
+  }
+
+  render(step) {
+
+    // текущая вершина
+    if(step.vertex !== undefined){
+      this.currentVertexEl.textContent = step.vertex;
+    }
+
+    // массив расстояний
+    if(step.dist){
+      this.renderDistances(step.dist, step.updatedVertex);
+    }
+
+    // очередь
+  if(step.queue){
+    this.renderQueue(step.queue);
+  }
+
+  }
+
+  renderDistances(dist, highlightIndex){
+
+  this.distancesEl.innerHTML = "";
+
+  const container = document.createElement("div");
+  container.className = "array-container";
+
+  const indexRow = document.createElement("div");
+  indexRow.className = "array-row";
+
+  const valueRow = document.createElement("div");
+  valueRow.className = "array-row";
+
+  dist.forEach((d, i) => {
+
+    const indexCell = document.createElement("div");
+    indexCell.className = "array-cell array-index";
+    indexCell.textContent = i;
+
+    const valueCell = document.createElement("div");
+    valueCell.className = "array-cell";
+    valueCell.textContent = d === Infinity ? "∞" : d;
+
+    if(i === highlightIndex){
+      valueCell.classList.add("array-updated");
+    }
+
+    indexRow.appendChild(indexCell);
+    valueRow.appendChild(valueCell);
+
+  });
+
+  container.appendChild(indexRow);
+  container.appendChild(valueRow);
+
+  this.distancesEl.appendChild(container);
+
+  }
+
+  renderQueue(queue){
+    this.queueEl.innerHTML = "";
+
+    const container = document.createElement("div");
+    container.className = "queue-container";
+
+    const label = document.createElement("div");
+    label.className = "queue-label";
+    label.textContent = "vertex : distance";
+
+    const row = document.createElement("div");
+    row.className = "queue-row";
+
+    queue
+      .slice()
+      .sort((a,b) => a.priority - b.priority)
+      .forEach(node => {
+
+        const cell = document.createElement("div");
+        cell.className = "queue-cell";
+
+        cell.textContent = `${node.value} : ${node.priority}`;
+
+        row.appendChild(cell);
+
+      });
+
+    container.appendChild(label);
+    container.appendChild(row);
+
+    this.queueEl.appendChild(container);
+
+  }
+
+}

@@ -16,11 +16,10 @@
     </nav>
   </header>
 
-  <main class="container">
+  <main class="container graph-layout">
      <section class="controls" aria-label="Controls">
-        <!-- playback row: start, pause, steps, reset + speed slider -->
         <div class="controls-row controls-row-playback">
-          <button id="prevBtn" class="btn icon-btn" disabled title="Step Backward">
+          <button id="prevBtn" class="btn icon-btn" enabled title="Step Backward">
             <svg viewBox="0 0 24 24">
               <polygon points="19,4 9,12 19,20"></polygon>
               <rect x="5" y="4" width="3" height="16"></rect>
@@ -31,7 +30,7 @@
               <polygon points="6,4 20,12 6,20"></polygon>
             </svg>
           </button>
-          <button id="nextBtn" class="btn icon-btn" disabled title="Step Forward">
+          <button id="nextBtn" class="btn icon-btn" enabled title="Step Forward">
             <svg viewBox="0 0 24 24">
               <polygon points="5,4 15,12 5,20"></polygon>
               <rect x="16" y="4" width="3" height="16"></rect>
@@ -42,7 +41,7 @@
               <path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"></path>
             </svg>
           </button>
-          <label for="speed" class="label controls-speed-label">            Speed:
+          <label for="speed" class="label controls-speed-label"> Speed:
           <span id="speedLabel" class="speed-label-text">250 ms</span>
           </label>
           <input id="speed" type="range" min="1" max="5" step="1" value="3" class="controls-speed-slider" />        </div>
@@ -52,33 +51,58 @@
           <input id="customArray" type="text" placeholder="e.g. 3 1 4 1 5" class="input-text" />
         </div>
       </section>
-  <section class="panel panel-viz">
+    <section class="panel panel-viz">
 
-    <div class="panel-header">
-      <h2>Graph visualization</h2>
+      <div class="panel-header">
+        <h2>Graph visualization</h2>
+      </div>
+
+      <div class="legend">
+    <div class="legend-item">
+      <span class="swatch swatch-active"></span>
+      active node
     </div>
 
-    <div class="legend">
-  <div class="legend-item">
-    <span class="swatch swatch-active"></span>
-    active node
-  </div>
-
-  <div class="legend-item">
-    <span class="swatch swatch-place"></span>
-    visited node
-  </div>
-</div>
-
-    <div class="viz-area">
-      <svg
-        id="graph"
-        class="viz-svg"
-        viewBox="0 0 600 400"
-      ></svg>
+    <div class="legend-item">
+      <span class="swatch swatch-place"></span>
+      visited node
+    </div>
     </div>
 
-  </section>
+      <div class="viz-area">
+        <svg
+          id="graph"
+          class="viz-svg"
+          viewBox="0 0 600 400"
+        ></svg>
+      </div>
+    </section>
+
+    <!--панель состояния-->
+    <section class="panel panel-state">
+
+      <div class="panel-header">
+        <h2>Algorithm state</h2>
+      </div>
+
+      <div class="state-content">
+
+        <div class="state-block">
+          <h3>Current vertex</h3>
+          <div id="currentVertex">—</div>
+        </div>
+
+        <div class="state-block">
+          <h3>Distances</h3>
+          <div id="distances"></div>
+        </div>
+
+        <div class="state-block">
+          <h3>Priority queue</h3>
+          <div id="queue"></div>
+        </div>
+      </div>
+    </section>
   </main>
 
 
