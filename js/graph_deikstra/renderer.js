@@ -225,34 +225,36 @@ markVisited(v) {
 
 
 //-----------раскладка---------
-function generateCircleLayout(n, width, height) {
-
+function generateCircleLayout(n, container) {
   const positions = {};
+  const rect = container.getBoundingClientRect();
+  const width = rect.width;
+  const height = rect.height;
 
-  const padding = 60; // отступ от краёв
-  const radius = Math.min(width, height) / 2 - padding;
+  // динамический padding
+  const padding = Math.min(width, height) * 0.08;
 
+  // радиус с учётом вертикального padding
+  const radius = Math.min(width, height - 2*padding) / 2;
+
+  // центр круга
   const centerX = width / 2;
-  const centerY = height / 2;
+  const centerY = radius + padding; // смещаем центр вверх
 
-  // чтобы вершина 0 была сверху
-  const startAngle = -Math.PI / 2;
+  const startAngle = -Math.PI / 2; // вершина 0 сверху
 
   for (let i = 0; i < n; i++) {
-
     const angle = startAngle + (2 * Math.PI * i) / n;
-
     const x = centerX + radius * Math.cos(angle);
     const y = centerY + radius * Math.sin(angle);
-
-    positions[i] = {
-      x: x,
-      y: y
-    };
+    positions[i] = { x, y };
   }
 
   return positions;
 }
+
+
+
 
 // -------------рендер панелия состояния----------------
 

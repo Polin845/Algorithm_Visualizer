@@ -119,16 +119,11 @@ function somefunc(){
   g.addEdge(new Edge(4,5,7));
   g.addEdge(new Edge(5,6,2));
 
-  const width = 600;
-  const height = 400;
-  const nodePositions = generateCircleLayout(
-    g.V(),
-    width,
-    height
-  );
+  const container = document.querySelector(".viz-area");
+  const nodePositions = generateCircleLayout(g.V(), container);
+  const renderer = new Renderer(g, nodePositions);
 
   const d = new Dijkstra(g, 0);
-  const renderer = new Renderer(g, nodePositions);
   const statePanel = new StatePanel();
   player = new StepPlayer(d.steps, renderer, statePanel);
   console.log("nfdfopdjopfjsf0j");

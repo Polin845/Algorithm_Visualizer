@@ -12,8 +12,11 @@ svg * {
 }
 /*--------*/
 
-.graph-svg {
-  width: 100%;
+.viz-area{
+  height: 500px;
+}
+
+.viz-svg{
   height: 100%;
 }
 
