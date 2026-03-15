@@ -49,14 +49,14 @@ class PlaybackControls {
     // Создаем HTML структуру
     this.container.innerHTML = `
       <div class="controls-row controls-row-playback">
-        <button class="btn icon-btn step-back" title="Step Backward" disabled>
+        <button class="btn icon-btn step-back" title="Шаг назад" disabled>
           <svg viewBox="0 0 24 24">
             <polygon points="19,4 9,12 19,20"></polygon>
             <rect x="5" y="4" width="3" height="16"></rect>
           </svg>
         </button>
         
-        <button class="btn icon-btn play-pause" title="Play">
+        <button class="btn icon-btn play-pause" title="Воспроизвести">
           <svg class="play-icon" viewBox="0 0 24 24">
             <polygon points="6,4 20,12 6,20"></polygon>
           </svg>
@@ -66,14 +66,14 @@ class PlaybackControls {
           </svg>
         </button>
         
-        <button class="btn icon-btn step-forward" title="Step Forward" disabled>
+        <button class="btn icon-btn step-forward" title="Шаг вперед" disabled>
           <svg viewBox="0 0 24 24">
             <polygon points="5,4 15,12 5,20"></polygon>
             <rect x="16" y="4" width="3" height="16"></rect>
           </svg>
         </button>
         
-        <button class="btn icon-btn reset" title="Reset" disabled>
+        <button class="btn icon-btn reset" title="Сбросить" disabled>
           <svg viewBox="0 0 24 24">
             <path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"></path>
           </svg>
@@ -81,8 +81,8 @@ class PlaybackControls {
         
         <div class="speed-control">
           <label class="speed-label">
-            Speed:
-            <span class="speed-value">${this.speed} ms</span>
+            Скорость:
+            <span class="speed-value">${this.speed} мс</span>
           </label>
           <input type="range" class="speed-slider" 
                  min="${this.options.speedMin}" 
@@ -139,7 +139,7 @@ class PlaybackControls {
 
     this.elements.speedSlider.addEventListener('input', (e) => {
       this.speed = parseInt(e.target.value);
-      this.elements.speedValue.textContent = `${this.speed} ms`;
+      this.elements.speedValue.textContent = `${this.speed} мс`;
       this.options.onSpeedChange(this.speed);
     });
   }
@@ -148,11 +148,11 @@ class PlaybackControls {
     if (this.isPlaying) {
       this.elements.playIcon.style.display = 'none';
       this.elements.pauseIcon.style.display = 'block';
-      this.elements.playPause.title = 'Pause';
+      this.elements.playPause.title = 'Пауза';
     } else {
       this.elements.playIcon.style.display = 'block';
       this.elements.pauseIcon.style.display = 'none';
-      this.elements.playPause.title = 'Play';
+      this.elements.playPause.title = 'Воспроизвести';
     }
   }
 

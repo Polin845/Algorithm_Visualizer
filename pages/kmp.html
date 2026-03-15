@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Algorithm Visualizer - KMP Search</title>
-  <!-- Подключаем ваши стили -->
+  <title>Визуализатор алгоритмов - КМП поиск</title>
   <link rel="stylesheet" href="../css/base.css" />
-  <!-- Специфичные стили для KMP (оставляем, но отредактируем под ваши классы) -->
   <link rel="stylesheet" href="../css/algorithms/kmp.css" />
 </head>
 <body>
@@ -16,37 +14,29 @@
   </header>
 
   <main class="container">
-    <!-- Секция контролов воспроизведения (будет вставлена через JS) -->
-    <section id="playback-section" class="controls">
-      <!-- PlaybackControls вставит сюда кнопки -->
-    </section>
+    <section id="playback-section" class="controls"></section>
 
-    <!-- Специфичные контролы для KMP -->
     <div class="controls-row">
-      <button id="generateBtn" class="btn">Generate Example</button>
+      <button id="generateBtn" class="btn">Сгенерировать пример</button>
       <input id="textInput" type="text" 
-             placeholder="Text: e.g. ABCABCABC" 
+             placeholder="Текст: например, АБВГДАБВГД" 
              class="input-text" style="flex: 2;">
       <input id="patternInput" type="text" 
-             placeholder="Pattern: e.g. ABC" 
+             placeholder="Образец: например, АБВ" 
              class="input-text" style="flex: 1;">
     </div>
 
-    <!-- Двухпанельная визуализация (используем split-view из style for kmp.css) -->
     <div class="split-view">
-      <!-- Левая панель - объяснения (используем panel) -->
       <section class="panel panel-state">
         <div class="panel-header">
-          <h2>Explanation</h2>
+          <h2>Объяснение</h2>
         </div>
         
-        <!-- Индикатор фазы (оставляем как есть) -->
         <div class="phase-indicator" id="phaseIndicator">
           <div class="phase-tab active" data-phase="prefix">1. Префикс-функция</div>
           <div class="phase-tab" data-phase="search">2. Поиск</div>
         </div>
         
-        <!-- Контент объяснений -->
         <div class="state-content">
           <div class="state-block">
             <h3>Текущий шаг</h3>
@@ -78,9 +68,7 @@
         </div>
       </section>
 
-      <!-- Правая панель - визуализация -->
       <div class="visualization-panel">
-        <!-- Секция с текстом (panel-viz) -->
         <section class="panel panel-viz">
           <div class="panel-header">
             <h2>Текст <span class="section-subtitle">(длина: <span id="textLength">0</span>)</span></h2>
@@ -92,7 +80,6 @@
           </div>
         </section>
 
-        <!-- Секция с образцом (panel-viz) -->
         <section class="panel panel-viz">
           <div class="panel-header">
             <h2>Образец <span class="section-subtitle">(длина: <span id="patternLength">0</span>)</span></h2>
@@ -104,10 +91,9 @@
           </div>
         </section>
 
-        <!-- Секция с префикс-функцией (panel-viz) -->
         <section class="panel panel-viz">
           <div class="panel-header">
-            <h2>Префикс-функция π (pi)</h2>
+            <h2>Префикс-функция π (пи)</h2>
           </div>
           <div class="viz-area">
             <div class="pi-container" id="piContainer">
@@ -118,11 +104,10 @@
       </div>
     </div>
 
-    <!-- Пояснения (panel-notes) -->
-    <section class="panel panel-notes" aria-label="Explanation">
-      <h2>How KMP Works</h2>
+    <section class="panel panel-notes" aria-label="Объяснение">
+      <h2>Как работает КМП</h2>
       <ol class="notes">
-        <li><strong>Префикс-функция:</strong> Для каждого префикса паттерна находим длину наибольшего собственного префикса, который является также суффиксом</li>
+        <li><strong>Префикс-функция:</strong> Для каждого префикса образца находим длину наибольшего собственного префикса, который является также суффиксом</li>
         <li><strong>Поиск:</strong> Используем префикс-функцию, чтобы не перепроверять уже сопоставленные символы</li>
         <li><strong>Сложность:</strong> O(n + m) времени и O(m) памяти</li>
       </ol>
@@ -131,15 +116,12 @@
 
   <footer class="footer">
     <div class="footer-inner">
-      Tip: Наблюдайте за индексами i и j, они показывают текущие позиции в тексте и образце
+      Совет: Следите за индексами i и j — они показывают текущие позиции в тексте и образце
     </div>
   </footer>
 
-  <!-- Скрипты -->
   <script src="../js/core/navigation.js"></script>
   <script src="../js/core/playback-controls.js"></script>
-  
-  <!-- Скрипты KMP (подруги) -->
   <script src="../js/algorithms/kmp/constants.js"></script>
   <script src="../js/algorithms/kmp/helpers.js"></script>
   <script src="../js/algorithms/kmp/state.js"></script>
