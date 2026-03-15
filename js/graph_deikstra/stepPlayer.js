@@ -1,8 +1,9 @@
 class StepPlayer {
 
-  constructor(steps, renderer) {
+  constructor(steps, renderer, statePanel) {
     this.steps = steps;
     this.renderer = renderer;
+    this.statePanel = statePanel;
     this.index = 0;
   }
 
@@ -11,6 +12,7 @@ class StepPlayer {
 
     const step = this.steps[this.index];
     this.renderer.render(step);
+    this.statePanel.render(step);
 
     this.index++;
   }
@@ -21,5 +23,6 @@ class StepPlayer {
     this.index--;
     const step = this.steps[this.index];
     this.renderer.render(step);
+    this.statePanel.render(step);
   }
 }

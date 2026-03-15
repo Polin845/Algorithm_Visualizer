@@ -73,4 +73,8 @@ class MinPQplus {
       index = smallest;
     }
   }
+  toArray() {
+    // возвращаем элементы в виде [{value, priority}, ...]
+    return this.heap.map(node => ({ value: node.value, priority: node.priority }));
+  }
 }

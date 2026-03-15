@@ -3,13 +3,6 @@
 // Глобальные переменные
 let isInitialized = false;
 
-// В main.js НЕ НУЖНО объявлять DOM элементы - они уже есть в constants.js
-// УДАЛИТЬ ЭТИ СТРОКИ:
-// const textInput = document.getElementById('textInput');
-// const patternInput = document.getElementById('patternInput');
-// const generateBtn = document.getElementById('generateBtn');
-// const phaseTabs = document.querySelectorAll('.phase-tab');
-
 // Функция обновления кнопок
 window.updateButtons = function() {
   if (window.playback) {
