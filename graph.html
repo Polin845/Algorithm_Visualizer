@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Graph Traversals - Algorithm Visualizer</title>
+  <title>Graph Algorithm Visualizer</title>
   <link rel="stylesheet" href="style for graph.css" />
 </head>
 <body>
@@ -19,9 +19,8 @@
     <section class="controls">
       <div class="controls-row">
         <button id="generateGraphBtn">Generate Random Graph</button>
-        <button id="startBfsBtn">Start BFS</button>
-        <button id="startDfsBtn">Start DFS</button>
-
+        <button id="nextBtn">Next</button>
+        <button id="prevBtn">Prev</button>
         <div class="slider-group">
           <label for="graphSpeedRange">Speed:</label>
           <input
@@ -35,7 +34,7 @@
         </div>
       </div>
       <div class="info">
-        Traversal starts from node 0. Nodes will be highlighted in the order they are visited.
+        Тут можно написать какое-нибудь инфо
       </div>
     </section>
 
@@ -44,7 +43,12 @@
     </section>
   </main>
 
-  <script src="graph.js"></script>
+  <script src="js/graph_deikstra/structures.js"></script>
+  <script src="js/graph_deikstra/min_heap.js"></script>
+  <script src="js/graph_deikstra/renderer.js"></script>
+  <script src="js/graph_deikstra/stepPlayer.js"></script>
+  <script src="js/graph_deikstra/the_deijkstra_itself.js"></script>
+
 </body>
 </html>
 
