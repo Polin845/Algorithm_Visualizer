@@ -3,7 +3,8 @@ class NavigationManager {
     this.algorithms = [
       { name: 'Graph Traversals', path: 'graph.html', icon: '🔍' },
       { name: 'Counting Sort', path: 'counting.html', icon: '📊' },
-      { name: 'Ford-Fulkerson', path: 'ford-fulkerson.html', icon: '🌊' }
+      { name: 'Ford-Fulkerson', path: 'ford-fulkerson.html', icon: '🌊' },
+      { name: 'KMP Search', path: 'kmp.html', icon: '🔎' }
     ];
     
     this.currentPath = this.getCurrentPage();
