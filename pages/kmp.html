@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Algorithm Visualizer - KMP</title>
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/algorithms/kmp.css">
+  <title>Algorithm Visualizer - KMP Search</title>
+  <!-- Подключаем ваши стили -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <!-- Специфичные стили для KMP (оставляем, но отредактируем под ваши классы) -->
+  <link rel="stylesheet" href="../css/algorithms/kmp.css" />
 </head>
 <body>
   <header class="header">
@@ -13,86 +15,118 @@
     <div class="nav-container"></div>
   </header>
 
-  <main class="main">
-    <!-- Контролы воспроизведения -->
-    <section id="playback-section"></section>
+  <main class="container">
+    <!-- Секция контролов воспроизведения (будет вставлена через JS) -->
+    <section id="playback-section" class="controls">
+      <!-- PlaybackControls вставит сюда кнопки -->
+    </section>
 
-    <!-- Специфичные контролы -->
-    <section class="controls-row algorithm-controls">
+    <!-- Специфичные контролы для KMP -->
+    <div class="controls-row">
       <button id="generateBtn" class="btn">Generate Example</button>
       <input id="textInput" type="text" 
              placeholder="Text: e.g. ABCABCABC" 
-             class="input-field" style="flex: 2;">
+             class="input-text" style="flex: 2;">
       <input id="patternInput" type="text" 
              placeholder="Pattern: e.g. ABC" 
-             class="input-field" style="flex: 1;">
-    </section>
+             class="input-text" style="flex: 1;">
+    </div>
 
-    <!-- Двухпанельная визуализация -->
+    <!-- Двухпанельная визуализация (используем split-view из style for kmp.css) -->
     <div class="split-view">
-      <!-- Левая панель - объяснения -->
-      <div class="explanation-panel">
+      <!-- Левая панель - объяснения (используем panel) -->
+      <section class="panel panel-state">
+        <div class="panel-header">
+          <h2>Explanation</h2>
+        </div>
+        
+        <!-- Индикатор фазы (оставляем как есть) -->
         <div class="phase-indicator" id="phaseIndicator">
           <div class="phase-tab active" data-phase="prefix">1. Префикс-функция</div>
           <div class="phase-tab" data-phase="search">2. Поиск</div>
         </div>
         
-        <div id="explanationContent" class="explanation-content">
-          <h3>Построение префикс-функции</h3>
-          <div id="stepExplanation" class="step-explanation">
-            Нажмите Play для начала
-          </div>
-        </div>
-
-        <div class="info-box">
-          <h4>Текущие индексы</h4>
-          <div class="indices">
-            <div class="index-item">
-              <span class="index-label">i (текст):</span>
-              <span class="index-value" id="iIndex">0</span>
-            </div>
-            <div class="index-item">
-              <span class="index-label">j (образец):</span>
-              <span class="index-value" id="jIndex">0</span>
+        <!-- Контент объяснений -->
+        <div class="state-content">
+          <div class="state-block">
+            <h3>Текущий шаг</h3>
+            <div id="stepExplanation" class="step-explanation">
+              Нажмите Play для начала
             </div>
           </div>
-        </div>
 
-        <div class="info-box">
-          <h4>Найденные вхождения</h4>
-          <div id="matchesList" class="matches-list">
-            <div class="empty-state">Пока нет совпадений</div>
+          <div class="state-block">
+            <h3>Текущие индексы</h3>
+            <div class="indices">
+              <div class="index-item">
+                <span class="index-label">i (текст):</span>
+                <span class="index-value" id="iIndex">0</span>
+              </div>
+              <div class="index-item">
+                <span class="index-label">j (образец):</span>
+                <span class="index-value" id="jIndex">0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="state-block">
+            <h3>Найденные вхождения</h3>
+            <div id="matchesList" class="matches-list">
+              <div class="empty-state">Пока нет совпадений</div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- Правая панель - визуализация -->
       <div class="visualization-panel">
-        <!-- Секция с текстом -->
-        <div class="viz-section">
-          <h3>Текст <span class="section-subtitle">(длина: <span id="textLength">0</span>)</span></h3>
-          <div class="text-container" id="textContainer">
-            <div class="text-content" id="textContent"></div>
+        <!-- Секция с текстом (panel-viz) -->
+        <section class="panel panel-viz">
+          <div class="panel-header">
+            <h2>Текст <span class="section-subtitle">(длина: <span id="textLength">0</span>)</span></h2>
           </div>
-        </div>
+          <div class="viz-area">
+            <div class="text-container" id="textContainer">
+              <div class="text-content" id="textContent"></div>
+            </div>
+          </div>
+        </section>
 
-        <!-- Секция с образцом -->
-        <div class="viz-section">
-          <h3>Образец <span class="section-subtitle">(длина: <span id="patternLength">0</span>)</span></h3>
-          <div class="pattern-container" id="patternContainer">
-            <div class="text-content" id="patternContent"></div>
+        <!-- Секция с образцом (panel-viz) -->
+        <section class="panel panel-viz">
+          <div class="panel-header">
+            <h2>Образец <span class="section-subtitle">(длина: <span id="patternLength">0</span>)</span></h2>
           </div>
-        </div>
+          <div class="viz-area">
+            <div class="pattern-container" id="patternContainer">
+              <div class="text-content" id="patternContent"></div>
+            </div>
+          </div>
+        </section>
 
-        <!-- Секция с префикс-функцией -->
-        <div class="viz-section">
-          <h3>Префикс-функция π (pi)</h3>
-          <div class="pi-container" id="piContainer">
-            <div class="pi-array" id="piArray"></div>
+        <!-- Секция с префикс-функцией (panel-viz) -->
+        <section class="panel panel-viz">
+          <div class="panel-header">
+            <h2>Префикс-функция π (pi)</h2>
           </div>
-        </div>
+          <div class="viz-area">
+            <div class="pi-container" id="piContainer">
+              <div class="pi-array" id="piArray"></div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
+
+    <!-- Пояснения (panel-notes) -->
+    <section class="panel panel-notes" aria-label="Explanation">
+      <h2>How KMP Works</h2>
+      <ol class="notes">
+        <li><strong>Префикс-функция:</strong> Для каждого префикса паттерна находим длину наибольшего собственного префикса, который является также суффиксом</li>
+        <li><strong>Поиск:</strong> Используем префикс-функцию, чтобы не перепроверять уже сопоставленные символы</li>
+        <li><strong>Сложность:</strong> O(n + m) времени и O(m) памяти</li>
+      </ol>
+    </section>
   </main>
 
   <footer class="footer">
@@ -102,8 +136,10 @@
   </footer>
 
   <!-- Скрипты -->
-  <script src="../js/core/playback-controls.js"></script>
   <script src="../js/core/navigation.js"></script>
+  <script src="../js/core/playback-controls.js"></script>
+  
+  <!-- Скрипты KMP (подруги) -->
   <script src="../js/algorithms/kmp/constants.js"></script>
   <script src="../js/algorithms/kmp/helpers.js"></script>
   <script src="../js/algorithms/kmp/state.js"></script>

@@ -3,6 +3,7 @@ const countSvg = document.getElementById("countSvg");
 const outputSvg = document.getElementById("outputSvg");
 
 const generateBtn = document.getElementById("generateBtn");
+/*
 const playPauseBtn = document.getElementById("playPauseBtn");
 const playPauseIcon = document.getElementById("playPauseIcon");
 const stepForwardBtn = document.getElementById("stepForwardBtn");
@@ -10,6 +11,7 @@ const stepBackBtn = document.getElementById("stepBackBtn");
 const resetBtn = document.getElementById("resetBtn");
 const speedSlider = document.getElementById("speed");
 const speedLabel = document.getElementById("speedLabel");
+*/
 
 const phaseBadge = document.getElementById("phaseBadge");
 const calcLine = document.getElementById("calcLine");
