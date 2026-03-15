@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Counting Sort - Algorithm Visualizer</title>
-  <link rel="stylesheet" href="../base.css" />
+  <title>Сортировка подсчетом - Визуализатор алгоритмов</title>
+  <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../style for counting.css" />
 </head>
 <body>
@@ -14,48 +14,23 @@
   </header>
 
     <main class="container">
-      <section class="controls" aria-label="Controls">
-        <!-- playback row: start, pause, steps, reset + speed slider -->
-        <div class="controls-row controls-row-playback">
-          <button id="stepBackBtn" class="btn icon-btn" disabled title="Step Backward">
-            <svg viewBox="0 0 24 24">
-              <polygon points="19,4 9,12 19,20"></polygon>
-              <rect x="5" y="4" width="3" height="16"></rect>
-            </svg>
-          </button>
-          <button id="playPauseBtn" class="btn icon-btn" title="Resume">
-            <svg id="playPauseIcon" viewBox="0 0 24 24">
-              <polygon points="6,4 20,12 6,20"></polygon>
-            </svg>
-          </button>
-          <button id="stepForwardBtn" class="btn icon-btn" disabled title="Step Forward">
-            <svg viewBox="0 0 24 24">
-              <polygon points="5,4 15,12 5,20"></polygon>
-              <rect x="16" y="4" width="3" height="16"></rect>
-            </svg>
-          </button>
-          <button id="resetBtn" class="btn icon-btn" disabled title="Reset">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"></path>
-            </svg>
-          </button>
-          <label for="speed" class="label controls-speed-label">
-        Speed:
-          <span id="speedLabel" class="speed-label-text">250 ms</span>
-          </label>
-          <input id="speed" type="range" min="1" max="5" step="1" value="3" class="controls-speed-slider" />
-        </div>
-        <!-- array generation row: generate button + custom input -->
-        <div class="controls-row controls-row-generate">
-          <button id="generateBtn" class="btn">Generate Array</button>
-          <input id="customArray" type="text" placeholder="e.g. 3 1 4 1 5" class="input-text" />
-        </div>
-      </section>
 
-      <section class="panel panel-viz">
-        <div class="panel-header">
-          <h2>Original Array</h2>
-          <div id="phaseBadge" class="phase-badge" aria-live="polite">Ready</div>
+    <section id="playback-section" class="controls" aria-label="Элементы управления воспроизведением"></section>
+    <section class="controls" aria-label="Генерация массива">
+
+      <div class="controls-row controls-row-generate">
+        <button id="generateBtn" class="btn">Сгенерировать массив</button>
+        <input id="customArray"
+              type="text"
+              placeholder="например: 3 1 4 1 5"
+              class="input-text" />
+      </div>
+    </section>
+
+  <section class="panel panel-viz">
+    <div class="panel-header">
+          <h2>Исходный массив</h2>
+          <div id="phaseBadge" class="phase-badge" aria-live="polite">Готов</div>
         </div>
         <div class="viz-area">
           <svg
@@ -63,29 +38,28 @@
             class="viz-svg"
             viewBox="0 0 800 220"
             role="img"
-            aria-label="Original array visualization"
+            aria-label="Визуализация исходного массива"
           ></svg>
         </div>
       </section>
 
       <section class="panel panel-viz">
         <div class="panel-header">
-          <h2>Count Array</h2>
+          <h2>Массив счетчиков</h2>
           <div class="legend">
             <span class="legend-item">
               <span class="swatch swatch-active"></span>
-              Active index
+              Текущий индекс
             </span>
           </div>
         </div>
-        <!--короче паметры viewbox потом все равно заменяются через js-->
         <div class="viz-area">
           <svg
             id="countSvg"
             class="viz-svg"
             viewBox="0 0 800 220"
             role="img"
-            aria-label="Count array visualization"
+            aria-label="Визуализация массива счетчиков"
           ></svg>
         </div>
         <div id="calcLine" class="calc-line" aria-live="polite"></div>
@@ -93,15 +67,15 @@
 
       <section class="panel panel-viz">
         <div class="panel-header">
-          <h2>Output Array</h2>
+          <h2>Результирующий массив</h2>
           <div class="legend">
             <span class="legend-item">
               <span class="swatch swatch-place"></span>
-              Placement target
+              Целевая позиция
             </span>
             <span class="legend-item">
               <span class="swatch swatch-filled"></span>
-              Filled cell
+              Заполненная ячейка
             </span>
           </div>
         </div>
@@ -111,20 +85,20 @@
             class="viz-svg"
             viewBox="0 0 800 180"
             role="img"
-            aria-label="Output array visualization"
+            aria-label="Визуализация результирующего массива"
           ></svg>
         </div>
       </section>
 
-      <section class="panel panel-notes" aria-label="Explanation">
-        <h2>What you’re seeing</h2>
+      <section class="panel panel-notes" aria-label="Объяснение">
+        <h2>Как это работает</h2>
         <ol class="notes">
           <li>
-            <strong>Counting:</strong> for each input value <code>x</code>, increment <code>count[x]</code>.
+            <strong>Подсчет:</strong> для каждого значения <code>x</code> из входного массива увеличиваем <code>счетчик[x]</code>.
           </li>
           <li>
-            <strong>Build output:</strong> iterate values from 0 to max, and write each value <code>v</code> into the output
-            array <code>count[v]</code> times (left-to-right), decrementing <code>count[v]</code> as you place.
+            <strong>Построение результата:</strong> проходим по значениям от 0 до максимума и записываем каждое значение <code>v</code> в выходной массив
+            <code>счетчик[v]</code> раз (слева направо), уменьшая <code>счетчик[v]</code> при каждой вставке.
           </li>
         </ol>
       </section>
@@ -132,18 +106,18 @@
 
     <footer class="footer">
       <div class="footer-inner">
-        Tip: try a slower speed first, then increase it once the idea clicks.
+        Совет: сначала попробуйте медленную скорость, затем увеличьте, когда поймете идею.
       </div>
     </footer>
 
-    <script src="../js/navigation.js"></script>
-    <script src="./js/counting_sort/constants.js"></script>
-    <script src="./js/counting_sort/helpers.js"></script>
-    <script src="./js/counting_sort/control_buttons.js"></script>
-    <script src="./js/counting_sort/state.js"></script>
-    <script src="./js/counting_sort/steps.js"></script>
-    <script src="./js/counting_sort/rendering.js"></script>
-    <script src="./js/counting_sort/main.js"></script>
-
+    <script src="../js/core/navigation.js"></script>
+    <script src="../js/counting_sort/constants.js"></script>
+    <script src="../js/counting_sort/helpers.js"></script>
+    <script src="../js/counting_sort/control_buttons.js"></script>
+    <script src="../js/counting_sort/state.js"></script>
+    <script src="../js/counting_sort/steps.js"></script>
+    <script src="../js/counting_sort/rendering.js"></script>
+    <script src="../js/core/playback-controls.js"></script>
+    <script src="../js/counting_sort/main.js"></script>
   </body>
 </html>

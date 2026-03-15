@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Algorithm Visualizer - Ford-Fulkerson</title>
-  <link rel="stylesheet" href="../css/main.css">
+  <title>Визуализатор алгоритмов - Форд-Фалкерсон</title>
+  <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/algorithms/ford-fulkerson.css">
 </head>
 <body>
@@ -14,29 +14,25 @@
   </header>
 
   <main class="main">
-    <!-- Контролы воспроизведения -->
     <section id="playback-section"></section>
 
-    <!-- Специфичные контролы -->
     <section class="controls-row algorithm-controls">
-      <button id="generateGraphBtn" class="btn">Generate Random Graph</button>
+      <button id="generateGraphBtn" class="btn">Сгенерировать случайный граф</button>
       <input id="graphInput" type="text" 
-             placeholder="e.g. 0-1-10, 1-2-5, 2-3-8" 
+             placeholder="например: 0-1-10, 1-2-5, 2-3-8" 
              class="input-field" style="flex: 2;">
-      <div class="info-badge" id="flowValue">Total flow: 0</div>
+      <div class="info-badge" id="flowValue">Общий поток: 0</div>
     </section>
 
-    <!-- Двухпанельная визуализация -->
     <div class="split-view">
-      <!-- Левая панель - граф -->
       <div class="graph-panel">
         <div class="panel-header">
-          <h2>Flow Network</h2>
+          <h2>Транспортная сеть</h2>
           <div class="legend">
-            <span class="legend-item"><span class="swatch swatch-source"></span> Source (0)</span>
-            <span class="legend-item"><span class="swatch swatch-sink"></span> Sink</span>
-            <span class="legend-item"><span class="swatch swatch-flow"></span> Flow</span>
-            <span class="legend-item"><span class="swatch swatch-residual"></span> Augmenting Path</span>
+            <span class="legend-item"><span class="swatch swatch-source"></span> Исток (0)</span>
+            <span class="legend-item"><span class="swatch swatch-sink"></span> Сток</span>
+            <span class="legend-item"><span class="swatch swatch-flow"></span> Поток</span>
+            <span class="legend-item"><span class="swatch swatch-residual"></span> Увеличивающий путь</span>
           </div>
         </div>
         <div class="graph-container">
@@ -44,87 +40,81 @@
         </div>
       </div>
 
-      <!-- Правая панель - информация -->
       <div class="info-panel">
-
-        <!--Пояснения для пользователя-->
         <div class="info-section">
           <h3>Как читать граф</h3>
           <ul style="color: var(--muted); font-size: 0.9rem;">
             <li><strong style="color: #4f7cff;">Синие ребра</strong> - доступная пропускная способность</li>
-            <li><strong style="color: #34d399;">Зеленые ребра</strong> - текущий поток (flow/capacity)</li>
+            <li><strong style="color: #34d399;">Зеленые ребра</strong> - текущий поток (поток/пропускная способность)</li>
             <li><strong style="color: #fb7185; opacity: 0.5;">Розовые пунктиры</strong> - обратные связи (возможность перераспределить поток)</li>
             <li><strong style="color: #fbbf24;">Желтые ребра</strong> - текущий увеличивающий путь</li>
-            <li><strong style="color: #ff4444;">Красные ребра</strong> - bottleneck (минимальная пропускная способность на пути)</li>
+            <li><strong style="color: #ff4444;">Красные ребра</strong> - узкое место (минимальная пропускная способность на пути)</li>
           </ul>
         </div>
 
         <div class="info-section">
-          <h3>Current Step</h3>
+          <h3>Текущий шаг</h3>
           <div id="currentStep" class="step-description">
-            Click Play or Step Forward to start
+            Нажмите Play или Step для начала
           </div>
         </div>
 
         <div class="info-section">
-          <h3>Augmenting Paths Found</h3>
+          <h3>Найденные увеличивающие пути</h3>
           <div id="pathsList" class="paths-list">
-            <div class="empty-state">No paths yet</div>
+            <div class="empty-state">Пока нет путей</div>
           </div>
         </div>
 
         <div class="info-section">
-          <h3>Final Flow</h3>
+          <h3>Итоговый поток</h3>
           <div class="flow-details">
             <div class="flow-row">
-              <span>Total flow from source:</span>
+              <span>Суммарный поток из истока:</span>
               <span class="flow-value" id="totalSourceFlow">0</span>
             </div>
             <div class="flow-row">
-              <span>Total flow to sink:</span>
+              <span>Суммарный поток в сток:</span>
               <span class="flow-value" id="totalSinkFlow">0</span>
             </div>
           </div>
         </div>
 
         <div class="info-section">
-          <h3>Edge Flows</h3>
+          <h3>Потоки по ребрам</h3>
           <div id="edgeFlowsList" class="edge-flows-list">
-            <div class="empty-state">No flows yet</div>
+            <div class="empty-state">Потоков пока нет</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Пояснения (свернутые) -->
     <details class="explanation-panel">
-      <summary>How Ford-Fulkerson Works</summary>
+      <summary>Как работает Форд-Фалкерсон</summary>
       <ol class="notes">
-        <li><strong>Find augmenting path:</strong> Find a path from source (0) to sink in residual network</li>
-        <li><strong>Find bottleneck:</strong> Find minimum residual capacity along the path</li>
-        <li><strong>Update flows:</strong> Add flow on forward edges, subtract on backward edges</li>
-        <li><strong>Repeat:</strong> Until no augmenting path exists</li>
+        <li><strong>Найти увеличивающий путь:</strong> Найти путь от истока (0) к стоку в остаточной сети</li>
+        <li><strong>Найти узкое место:</strong> Найти минимальную остаточную пропускную способность вдоль пути</li>
+        <li><strong>Обновить потоки:</strong> Добавить поток в прямых ребрах, вычесть в обратных</li>
+        <li><strong>Повторять:</strong> Пока существует увеличивающий путь</li>
       </ol>
     </details>
   </main>
 
   <footer class="footer">
     <div class="footer-inner">
-      Tip: Source is node 0 (green), Sink is last node (red)
+      Совет: Исток — узел 0 (зеленый), Сток — последний узел (красный)
     </div>
   </footer>
 
-  <!-- Легенда!-->
   <div class="legend">
-    <span class="legend-item"><span class="swatch swatch-source"></span> Source (0)</span>
-    <span class="legend-item"><span class="swatch swatch-sink"></span> Sink</span>
-    <span class="legend-item"><span class="swatch swatch-flow"></span> Flow</span>
-    <span class="legend-item"><span class="swatch swatch-residual"></span> Augmenting Path</span>
-    <span class="legend-item"><span class="swatch swatch-bottleneck"></span> Bottleneck Edge</span>
-    <span class="legend-item"><span class="swatch swatch-saturated"></span> Saturated Edge</span>
+    <span class="legend-item"><span class="swatch swatch-source"></span> Исток (0)</span>
+    <span class="legend-item"><span class="swatch swatch-sink"></span> Сток</span>
+    <span class="legend-item"><span class="swatch swatch-flow"></span> Поток</span>
+    <span class="legend-item"><span class="swatch swatch-residual"></span> Увеличивающий путь</span>
+    <span class="legend-item"><span class="swatch swatch-bottleneck"></span> Узкое место</span>
+    <span class="legend-item"><span class="swatch swatch-saturated"></span> Насыщенное ребро</span>
   </div>
 
-  <!-- Скрипты -->
   <script src="../js/core/playback-controls.js"></script>
   <script src="../js/core/navigation.js"></script>
   <script src="../js/algorithms/ford-fulkerson/constants.js"></script>

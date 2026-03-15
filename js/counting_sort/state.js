@@ -35,4 +35,7 @@ function generateArray() {
   maxValue = Math.max(...input);
   count = Array.from({ length: maxValue + 1 }, () => 0);
   output = Array.from({ length: input.length }, () => null);
+
+    console.log("Generated array:", input);
+
 }

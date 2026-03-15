@@ -14,6 +14,8 @@
   border-radius: 14px;
   padding: 16px;
   box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
 }
 
 .graph-container {
@@ -23,6 +25,7 @@
   border-radius: 12px;
   border: 1px dashed var(--border);
   overflow: hidden;
+  flex: 1;
 }
 
 .graph-svg {
@@ -41,7 +44,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-height: 600px;
+  height: 500px;
   overflow-y: auto;
 }
 
@@ -192,12 +195,15 @@
 .swatch-path { background: #fbbf24; }
 .swatch-bottleneck { background: #ff4444; }
 .swatch-saturated { background: #888888; opacity: 0.5; }
+.swatch-forward { background: #60a5fa; }
+.swatch-backward { background: #fb7185; }
 
 /* Стили для вершин */
 .node-circle {
   transition: all 0.2s ease;
   stroke: #38bdf8;
   stroke-width: 2;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
 }
 
 .node-circle.source { 
@@ -213,32 +219,52 @@
 }
 
 .node-circle.active { 
+  filter: drop-shadow(0 0 10px #fbbf24);
   stroke: #fbbf24;
   stroke-width: 3;
+  animation: node-pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes node-pulse {
+  0% { filter: drop-shadow(0 0 5px #fbbf24); }
+  50% { filter: drop-shadow(0 0 15px #fbbf24); }
+  100% { filter: drop-shadow(0 0 5px #fbbf24); }
 }
 
 .node-text {
   fill: white;
-  font-size: 14px;
   font-weight: bold;
   text-anchor: middle;
   dominant-baseline: middle;
   pointer-events: none;
 }
 
-/* Стили для ребер - только изменение цвета, без свечений */
+/* Стили для ребер */
 .edge-line {
   transition: all 0.2s ease;
 }
 
 .edge-line.path-edge {
   stroke: #fbbf24;
-  stroke-width: 4;
+  filter: drop-shadow(0 0 5px #fbbf24);
+  animation: path-pulse 1s ease-in-out infinite;
+}
+
+@keyframes path-pulse {
+  0% { filter: drop-shadow(0 0 2px #fbbf24); }
+  50% { filter: drop-shadow(0 0 8px #fbbf24); }
+  100% { filter: drop-shadow(0 0 2px #fbbf24); }
 }
 
 .edge-line.bottleneck {
   stroke: #ff4444 !important;
-  stroke-width: 4 !important;
+  animation: bottleneck-pulse 1s ease-in-out infinite;
+}
+
+@keyframes bottleneck-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
 }
 
 .edge-line.saturated {
@@ -251,8 +277,6 @@
   fill: rgba(0, 0, 0, 0.85);
   stroke: #4f7cff;
   stroke-width: 1.5;
-  rx: 6;
-  ry: 6;
   transition: all 0.3s ease;
 }
 
@@ -264,27 +288,117 @@
 
 .edge-text {
   fill: white;
-  font-size: 12px;
   font-weight: bold;
   text-anchor: middle;
   dominant-baseline: middle;
 }
 
+/* Стили для выбора пути */
+.path-selection {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.selection-explanation {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.available-paths {
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.path-candidate {
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 4px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 3px solid transparent;
+}
+
+.path-candidate.selected {
+  border-left-color: var(--warning);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.path-candidate .path-nodes {
+  color: var(--text);
+  font-family: monospace;
+}
+
+.path-candidate .bottleneck {
+  background: var(--primary);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+}
+
+.path-candidate .bottleneck.selected {
+  background: var(--warning);
+  color: black;
+}
+
+/* Информация об остаточной сети */
+.residual-info {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.residual-edge {
+  display: inline-block;
+  background: rgba(96, 165, 250, 0.2);
+  padding: 2px 6px;
+  margin: 2px;
+  border-radius: 12px;
+  font-family: monospace;
+}
+
+.residual-edge.forward {
+  border-left: 2px solid #60a5fa;
+}
+
+.residual-edge.backward {
+  border-left: 2px solid #fb7185;
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
 /* Адаптивность */
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
   .split-view {
     grid-template-columns: 1fr;
   }
   
   .graph-container {
-    height: 400px;
+    height: 450px;
   }
   
-  .node-text {
-    font-size: 12px;
+  .info-panel {
+    height: 450px;
+  }
+}
+
+@media (max-width: 768px) {
+  .graph-container {
+    height: 350px;
   }
   
-  .edge-text {
-    font-size: 10px;
+  .info-panel {
+    height: 350px;
+  }
+  
+  .legend {
+    font-size: 0.75rem;
+    gap: 8px;
   }
 }

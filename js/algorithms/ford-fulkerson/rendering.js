@@ -12,10 +12,10 @@ function createArrowhead(svg, id, color) {
   const marker = document.createElementNS(SVG_NS, 'marker');
   marker.setAttribute('id', id);
   marker.setAttribute('viewBox', '0 0 10 10');
-  marker.setAttribute('refX', '9');
+  marker.setAttribute('refX', '8'); // Уменьшено с 9
   marker.setAttribute('refY', '5');
-  marker.setAttribute('markerWidth', '6');
-  marker.setAttribute('markerHeight', '6');
+  marker.setAttribute('markerWidth', '6'); // Уменьшено
+  marker.setAttribute('markerHeight', '6'); // Уменьшено
   marker.setAttribute('orient', 'auto');
   
   const polygon = document.createElementNS(SVG_NS, 'polygon');
@@ -31,27 +31,35 @@ function createArrowhead(svg, id, color) {
 
 // Проверка коллизий для подписей
 function checkLabelCollision(textPos, nodePositions, existingLabels, currentEdge) {
-  const minDistFromNodes = 45;
-  const minDistFromLabels = 35;
-  const nodeRadius = NODE_RADIUS || 20;
+  const minDistFromNodes = 80; // Увеличено с 70
+  const minDistFromLabels = 60; // Увеличено с 50
+  const nodeRadius = NODE_RADIUS || 30; // Увеличено с 25
   
+  // Проверка расстояния до вершин
   for (let node in nodePositions) {
     const pos = nodePositions[node];
     const dist = Math.sqrt(
       Math.pow(textPos.x - pos.x, 2) + 
       Math.pow(textPos.y - pos.y, 2)
     );
-    if (dist < minDistFromNodes + nodeRadius) return true;
+    if (dist < minDistFromNodes + nodeRadius) {
+      return true;
+    }
   }
   
+  // Проверка расстояния до других подписей
   for (let existing of existingLabels) {
-    if (existing.edgeFrom === currentEdge.from && existing.edgeTo === currentEdge.to) continue;
+    if (existing.edgeFrom === currentEdge.from && existing.edgeTo === currentEdge.to) {
+      continue;
+    }
     
     const dist = Math.sqrt(
       Math.pow(textPos.x - existing.x, 2) + 
       Math.pow(textPos.y - existing.y, 2)
     );
-    if (dist < minDistFromLabels) return true;
+    if (dist < minDistFromLabels) {
+      return true;
+    }
   }
   
   return false;
@@ -68,25 +76,32 @@ function findOptimalLabelPosition(from, to, nodePositions, existingLabels) {
   const perpX = -ny;
   const perpY = nx;
   
+  // Пробуем разные смещения (увеличены)
   const offsets = [
-    { perp: 20, along: 0 },
-    { perp: -20, along: 0 },
-    { perp: 25, along: 10 },
-    { perp: -25, along: -10 },
-    { perp: 15, along: 15 },
-    { perp: -15, along: -15 },
-    { perp: 30, along: -5 },
-    { perp: -30, along: 5 },
+    { perp: 45, along: 0 },   // сверху
+    { perp: -45, along: 0 },  // снизу
+    { perp: 50, along: 20 },  // сверху со смещением
+    { perp: -50, along: -20 }, // снизу со смещением
+    { perp: 40, along: 25 },  // ближе к началу
+    { perp: -40, along: -25 }, // ближе к началу снизу
+    { perp: 55, along: -15 },  // дальше сверху
+    { perp: -55, along: 15 },  // дальше снизу
+    { perp: 60, along: 10 },   // очень далеко сверху
+    { perp: -60, along: -10 }, // очень далеко снизу
   ];
   
   const midX = (from.x + to.x) / 2;
   const midY = (from.y + to.y) / 2;
   
+  // Сортируем смещения по предпочтению
   for (let offset of offsets) {
     const textX = midX + nx * offset.along + perpX * offset.perp;
     const textY = midY + ny * offset.along + perpY * offset.perp;
     
-    if (textX < 40 || textX > 860 || textY < 30 || textY > 470) continue;
+    // Проверяем границы (увеличены)
+    if (textX < 80 || textX > 920 || textY < 70 || textY > 530) {
+      continue;
+    }
     
     const textPos = { x: textX, y: textY };
     
@@ -95,14 +110,18 @@ function findOptimalLabelPosition(from, to, nodePositions, existingLabels) {
     }
   }
   
-  return { x: midX + perpX * 30, y: midY + perpY * 30 };
+  // Если ничего не нашли, возвращаем позицию под углом
+  return {
+    x: midX + perpX * 45 + nx * 15,
+    y: midY + perpY * 45 + ny * 15
+  };
 }
 
 // Отрисовка ребра
 function drawEdge(svg, from, to, options = {}, nodePositions, existingLabels) {
   const {
     color = '#4f7cff',
-    width = 2,
+    width = 3, // Увеличено с 2.5
     dasharray = null,
     label = '',
     markerEnd = null,
@@ -123,7 +142,6 @@ function drawEdge(svg, from, to, options = {}, nodePositions, existingLabels) {
   if (dasharray) line.setAttribute('stroke-dasharray', dasharray);
   if (markerEnd) line.setAttribute('marker-end', markerEnd);
   
-  // Добавляем классы для стилизации через CSS
   line.classList.add('edge-line');
   if (isInPath) line.classList.add('path-edge');
   if (isBottleneck) line.classList.add('bottleneck');
@@ -135,28 +153,33 @@ function drawEdge(svg, from, to, options = {}, nodePositions, existingLabels) {
   if (label) {
     const textPos = findOptimalLabelPosition(from, to, nodePositions, existingLabels);
     
-    existingLabels.push({ x: textPos.x, y: textPos.y, edgeFrom: from, edgeTo: to });
+    existingLabels.push({ 
+      x: textPos.x, y: textPos.y, 
+      edgeFrom: from, edgeTo: to,
+      label: label 
+    });
     
-    // Фон для текста
+    // Фон для текста (увеличен)
     const bg = document.createElementNS(SVG_NS, 'rect');
-    const textWidth = label.length * 7 + 20;
+    const textWidth = label.length * 12 + 30; // Увеличено с 9*8+24
     bg.setAttribute('x', textPos.x - textWidth / 2);
-    bg.setAttribute('y', textPos.y - 12);
+    bg.setAttribute('y', textPos.y - 20); // Увеличено с -16
     bg.setAttribute('width', textWidth);
-    bg.setAttribute('height', 24);
-    bg.setAttribute('rx', 6);
-    bg.setAttribute('ry', 6);
+    bg.setAttribute('height', 40); // Увеличено с 32
+    bg.setAttribute('rx', 12); // Увеличено с 10
+    bg.setAttribute('ry', 12); // Увеличено с 10
     bg.classList.add('edge-text-bg');
     if (isBottleneck) bg.classList.add('bottleneck');
     svg.appendChild(bg);
     
-    // Текст
+    // Текст (увеличен)
     const text = document.createElementNS(SVG_NS, 'text');
     text.setAttribute('x', textPos.x);
     text.setAttribute('y', textPos.y);
     text.setAttribute('text-anchor', 'middle');
     text.setAttribute('dominant-baseline', 'middle');
     text.classList.add('edge-text');
+    text.setAttribute('font-size', '18'); // Увеличено с 14
     text.textContent = label;
     svg.appendChild(text);
   }
@@ -184,17 +207,18 @@ function drawNode(svg, node, pos, options = {}) {
   text.setAttribute('text-anchor', 'middle');
   text.setAttribute('dominant-baseline', 'middle');
   text.classList.add('node-text');
+  text.setAttribute('font-size', '22'); // Увеличено с 18
   text.textContent = label;
   svg.appendChild(text);
 }
 
-// Расчет позиций узлов
+// Расчет позиций узлов (УВЕЛИЧЕННОЕ СОДЕРЖИМОЕ)
 function calculateNodePositions(graph) {
   const positions = {};
   const nodes = Array.from(graph.nodes).sort((a, b) => a - b);
-  const width = 850;
-  const height = 450;
-  const margin = { x: 80, y: 60 };
+  const width = 1000;
+  const height = 600;
+  const margin = { x: 150, y: 120 }; // Увеличены отступы
   
   // Фиксируем исток (0) слева по центру
   const source = 0;
@@ -210,56 +234,28 @@ function calculateNodePositions(graph) {
   if (middleNodes.length > 0) {
     middleNodes.sort((a, b) => a - b);
     
-    const startX = margin.x + 100;
-    const endX = width - margin.x - 100;
-    
-    // Группируем по слоям
-    const layers = new Map();
-    
-    for (let node of middleNodes) {
-      let minDist = Infinity;
-      for (let [key, edge] of graph.edges) {
-        if (edge.to === node && edge.from === source) {
-          minDist = 1;
-          break;
-        }
-      }
-      if (minDist === Infinity) minDist = 2;
-      layers.set(node, minDist);
-    }
-    
-    const nodesByLayer = new Map();
-    for (let [node, layer] of layers) {
-      if (!nodesByLayer.has(layer)) nodesByLayer.set(layer, []);
-      nodesByLayer.get(layer).push(node);
-    }
+    // Распределение по горизонтали с большим шагом
+    const startX = margin.x + 180;
+    const endX = width - margin.x - 180;
+    const stepX = (endX - startX) / (middleNodes.length + 1);
     
     let currentX = startX;
-    for (let layer of [1, 2, 3]) {
-      const nodesInLayer = nodesByLayer.get(layer) || [];
-      if (nodesInLayer.length === 0) continue;
-      
-      const verticalSpacing = Math.max(80, (height - 2 * margin.y) / (nodesInLayer.length + 1));
-      
-      for (let i = 0; i < nodesInLayer.length; i++) {
-        positions[nodesInLayer[i]] = {
-          x: currentX,
-          y: margin.y + (i + 1) * verticalSpacing
-        };
-      }
-      currentX += 150;
-    }
     
-    // Оставшиеся узлы
-    const unplaced = middleNodes.filter(n => !positions[n]);
-    if (unplaced.length > 0) {
-      const stepX = (endX - startX) / (unplaced.length + 1);
-      for (let i = 0; i < unplaced.length; i++) {
-        positions[unplaced[i]] = {
-          x: startX + (i + 1) * stepX,
-          y: height / 2
-        };
-      }
+    for (let i = 0; i < middleNodes.length; i++) {
+      const node = middleNodes[i];
+      
+      // Распределяем по вертикали с большим смещением
+      let yOffset = 0;
+      if (i % 3 === 0) yOffset = -100;
+      else if (i % 3 === 1) yOffset = 0;
+      else yOffset = 100;
+      
+      positions[node] = {
+        x: currentX,
+        y: height / 2 + yOffset
+      };
+      
+      currentX += stepX;
     }
   }
   
@@ -279,6 +275,9 @@ function renderGraph(svg, graph, options = {}) {
     saturatedEdges = []
   } = options;
   
+  // Устанавливаем viewBox, но оставляем его таким же - элементы будут крупнее
+  svg.setAttribute('viewBox', '0 0 1000 600');
+  
   // Создаем базовые стрелки
   const arrowDefault = createArrowhead(svg, 'arrow-default', '#4f7cff');
   
@@ -291,6 +290,13 @@ function renderGraph(svg, graph, options = {}) {
   // Получаем все ребра из графа
   const edges = Array.from(graph.edges.values());
   
+  // Сортируем ребра: сначала те, у которых flow=0 (чтобы подписи не накладывались)
+  edges.sort((a, b) => {
+    if (a.flow > 0 && b.flow === 0) return 1;
+    if (a.flow === 0 && b.flow > 0) return -1;
+    return 0;
+  });
+  
   // Рисуем все ребра
   for (let edge of edges) {
     const fromPos = nodePositions[edge.from];
@@ -298,27 +304,21 @@ function renderGraph(svg, graph, options = {}) {
     
     if (!fromPos || !toPos) continue;
     
-    // Проверяем, входит ли ребро в текущий путь
     const isInPath = augmentingPath.some(e => e.from === edge.from && e.to === edge.to);
-    
-    // Проверяем, является ли ребро bottleneck
     const isBottleneck = bottleneckEdges.some(e => e.from === edge.from && e.to === edge.to);
-    
-    // Проверяем, насыщено ли ребро
     const isSaturated = saturatedEdges.some(e => e.from === edge.from && e.to === edge.to);
     
-    // Определяем цвет в зависимости от состояния
+    // Определяем цвет
     let color;
     if (isInPath) color = '#fbbf24';
     else if (edge.flow > 0) color = '#34d399';
     else color = '#4f7cff';
     
-    // Определяем толщину
-    let width = 2;
-    if (isInPath) width = 4;
-    else if (edge.flow > 0) width = 3;
+    // Определяем толщину (увеличена)
+    let width = 3.5;
+    if (isInPath) width = 6;
+    else if (edge.flow > 0) width = 4.5;
     
-    // Формируем подпись
     const label = `${edge.flow}/${edge.capacity}`;
     
     drawEdge(svg, fromPos, toPos, {
