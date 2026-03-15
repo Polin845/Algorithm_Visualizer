@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algorithm Visualizer - Home</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Algorithm Visualizer</h1>
+    <div class="nav-container"></div>
+  </header>
+
+  <main class="main main--home">
+    <h2>Choose an Algorithm to Visualize</h2>
+    
+    <div class="algorithm-grid">
+      <a href="pages/graph.html" class="algorithm-card">
+        <div class="algorithm-icon">🔍</div>
+        <div class="algorithm-title">Graph Traversals</div>
+        <div class="algorithm-description">
+          Watch BFS and DFS explore graphs step by step. 
+          See how each algorithm discovers nodes in real-time.
+        </div>
+      </a>
+      
+      <a href="pages/counting.html" class="algorithm-card">
+        <div class="algorithm-icon">📊</div>
+        <div class="algorithm-title">Counting Sort</div>
+        <div class="algorithm-description">
+          Non-comparison based sorting. Watch how count array 
+          transforms into a sorted output.
+        </div>
+      </a>
+      
+      <a href="pages/ford-fulkerson.html" class="algorithm-card">
+        <div class="algorithm-icon">🌊</div>
+        <div class="algorithm-title">Ford-Fulkerson</div>
+        <div class="algorithm-description">
+          Maximum flow algorithm. See augmenting paths 
+          and residual networks in action.
+        </div>
+      </a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>Interactive algorithm visualizations for learning and teaching</p>
+      <p style="font-size: 0.8rem; margin-top: 8px;">© 2024 Algorithm Visualizer</p>
+    </div>
+  </footer>
+
+  <script src="js/core/navigation.js"></script>
+</body>
+</html>
