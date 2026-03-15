@@ -1,7 +1,7 @@
 class NavigationManager {
   constructor() {
     this.algorithms = [
-      { name: 'Graph Traversals', path: 'graph.html', icon: '🔍' },
+      { name: 'Dijkstra', path: 'dijkstra.html', icon: '⚡' }, // Убрали pages/
       { name: 'Counting Sort', path: 'counting.html', icon: '📊' },
       { name: 'Ford-Fulkerson', path: 'ford-fulkerson.html', icon: '🌊' },
       { name: 'KMP Search', path: 'kmp.html', icon: '🔎' }
@@ -12,7 +12,7 @@ class NavigationManager {
 
   getCurrentPage() {
     const path = window.location.pathname;
-    // Получаем только имя файла
+    // Получаем только имя файла (последний сегмент)
     return path.split('/').pop() || 'index.html';
   }
 
@@ -20,18 +20,19 @@ class NavigationManager {
     const nav = document.createElement('nav');
     nav.className = 'nav';
     
-    // Определяем, в какой папке мы находимся
-    const isInPages = window.location.pathname.includes('/pages/');
+    // Определяем, находимся ли мы в папке pages
+    const pathname = window.location.pathname;
+    const isInPages = pathname.includes('/pages/');
     
     this.algorithms.forEach(algo => {
       const link = document.createElement('a');
       
-      // Формируем правильный путь в зависимости от текущей папки
+      // Формируем правильный путь в зависимости от текущего расположения
       if (isInPages) {
-        // Если мы уже в папке pages, то ссылка просто на файл
+        // Если мы в pages/, ссылка просто на файл
         link.href = algo.path;
       } else {
-        // Если мы в корне, то добавляем pages/
+        // Если мы в корне, добавляем pages/
         link.href = `pages/${algo.path}`;
       }
       
