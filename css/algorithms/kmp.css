@@ -1,0 +1,302 @@
+/* Стили для KMP алгоритма */
+
+.split-view {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* ===== ЛЕВАЯ ПАНЕЛЬ - ОБЪЯСНЕНИЯ ===== */
+.explanation-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.phase-indicator {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.phase-tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.phase-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.phase-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.explanation-content {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.explanation-content h3 {
+  margin: 0 0 12px 0;
+  color: #d8e5ff;
+  font-size: 1.1rem;
+}
+
+.step-explanation {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 80px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid var(--primary);
+}
+
+.step-explanation strong {
+  color: var(--warning);
+  background: rgba(251, 191, 36, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.info-box {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.info-box h4 {
+  margin: 0 0 10px 0;
+  color: #d8e5ff;
+  font-size: 0.95rem;
+}
+
+.indices {
+  display: flex;
+  gap: 20px;
+  justify-content: space-around;
+}
+
+.index-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+.index-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.index-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary);
+  background: rgba(79, 124, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.matches-list {
+  max-height: 100px;
+  overflow-y: auto;
+  font-size: 0.9rem;
+}
+
+.match-item {
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  margin-bottom: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--success);
+}
+
+.match-position {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.match-text {
+  color: var(--text);
+}
+
+/* ===== ПРАВАЯ ПАНЕЛЬ - ВИЗУАЛИЗАЦИЯ ===== */
+.visualization-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.viz-section {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.viz-section h3 {
+  margin: 0 0 12px 0;
+  color: #d8e5ff;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-subtitle {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: normal;
+}
+
+/* Контейнеры для текста */
+.text-container, .pattern-container {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 80px;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 2;
+}
+
+.text-content {
+  display: inline;
+  position: relative;
+}
+
+/* Символы текста */
+.char {
+  position: relative;
+  display: inline-block;
+  padding: 4px 2px;
+  transition: all 0.2s ease;
+}
+
+/* Подсветка для текущей позиции */
+.char.current-text {
+  background-color: rgba(79, 124, 255, 0.3);
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--primary);
+  font-weight: bold;
+}
+
+.char.current-pattern {
+  background-color: rgba(251, 191, 36, 0.3);
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--warning);
+  font-weight: bold;
+}
+
+/* Подсветка для совпавшей подстроки в образце */
+.char.match-highlight {
+  background-color: rgba(52, 211, 153, 0.3);
+  border-radius: 4px;
+}
+
+/* Подсветка для найденного вхождения в тексте */
+.char.found-match {
+  background-color: rgba(52, 211, 153, 0.2);
+  border-bottom: 3px solid var(--success);
+}
+
+/* Префикс-функция */
+.pi-container {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+}
+
+.pi-array {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pi-cell {
+  min-width: 50px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 4px;
+}
+
+.pi-index {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.pi-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary);
+  background: rgba(79, 124, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.pi-cell.current {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: var(--warning);
+}
+
+.pi-cell.current .pi-value {
+  background: var(--warning);
+  color: black;
+}
+
+/* Индекс j в образце */
+.j-highlight {
+  background-color: rgba(251, 191, 36, 0.3);
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Пустое состояние */
+.empty-state {
+  color: var(--muted);
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+}
+
+/* Адаптивность */
+@media (max-width: 1000px) {
+  .split-view {
+    grid-template-columns: 1fr;
+  }
+  
+  .indices {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
