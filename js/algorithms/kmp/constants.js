@@ -18,6 +18,8 @@ const stepExplanation = document.getElementById('stepExplanation');
 const phaseIndicator = document.getElementById('phaseIndicator');
 const explanationContent = document.getElementById('explanationContent');
 
+const phaseTabs = document.querySelectorAll('.phase-tab');
+
 // Константы
 const SVG_NS = 'http://www.w3.org/2000/svg';
 

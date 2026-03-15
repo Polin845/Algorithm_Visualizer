@@ -1,12 +1,14 @@
 // Главный файл KMP
 
-// Глобальные переменные 
+// Глобальные переменные
 let isInitialized = false;
 
-// DOM элементы
-const patternInput = document.getElementById('patternInput');
-const generateBtn = document.getElementById('generateBtn');
-const phaseTabs = document.querySelectorAll('.phase-tab');
+// В main.js НЕ НУЖНО объявлять DOM элементы - они уже есть в constants.js
+// УДАЛИТЬ ЭТИ СТРОКИ:
+// const textInput = document.getElementById('textInput');
+// const patternInput = document.getElementById('patternInput');
+// const generateBtn = document.getElementById('generateBtn');
+// const phaseTabs = document.querySelectorAll('.phase-tab');
 
 // Функция обновления кнопок
 window.updateButtons = function() {
@@ -46,20 +48,20 @@ function initPlaybackControls() {
 // Генерация примера
 function generateExample() {
   const example = getRandomExample();
-  text = example.text;      // text уже объявлен в state.js
-  pattern = example.pattern; // pattern уже объявлен в state.js
+  text = example.text;      // из state.js
+  pattern = example.pattern; // из state.js
   
   // Обновляем поля ввода
-  if (textInput) textInput.value = text;
-  if (patternInput) patternInput.value = pattern;
+  if (textInput) textInput.value = text;      // textInput из constants.js
+  if (patternInput) patternInput.value = pattern; // patternInput из constants.js
   
   // Вычисляем префикс-функцию
-  pi = computePrefixFunction(pattern); // pi уже объявлен в state.js
+  pi = computePrefixFunction(pattern); // из state.js
   
   // Строим шаги анимации
-  animationSteps = buildAnimationSteps(text, pattern);
-  currentStepIndex = 0;
-  foundMatches = [];
+  animationSteps = buildAnimationSteps(text, pattern); // из state.js
+  currentStepIndex = 0; // из state.js
+  foundMatches = []; // из state.js
   
   // Рендерим первый шаг
   if (animationSteps.length > 0) {
@@ -75,8 +77,8 @@ function generateExample() {
 
 // Обработка пользовательского ввода
 function handleInput() {
-  const newText = textInput.value.trim();
-  const newPattern = patternInput.value.trim();
+  const newText = textInput.value.trim();      // textInput из constants.js
+  const newPattern = patternInput.value.trim(); // patternInput из constants.js
   
   if (!validateInput(newText, newPattern)) return;
   
@@ -184,24 +186,25 @@ function initialize() {
   
   initPlaybackControls();
   
-  if (generateBtn) {
+  if (generateBtn) {  // generateBtn из constants.js
     generateBtn.addEventListener('click', generateExample);
   }
   
-  if (textInput) {
+  if (textInput) {    // textInput из constants.js
     textInput.addEventListener('change', handleInput);
     textInput.addEventListener('keyup', (e) => {
       if (e.key === 'Enter') handleInput();
     });
   }
   
-  if (patternInput) {
+  if (patternInput) { // patternInput из constants.js
     patternInput.addEventListener('change', handleInput);
     patternInput.addEventListener('keyup', (e) => {
       if (e.key === 'Enter') handleInput();
     });
   }
   
+  // phaseTabs из constants.js
   phaseTabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const phase = tab.dataset.phase;
