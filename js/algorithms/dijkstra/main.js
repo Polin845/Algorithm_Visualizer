@@ -5,6 +5,9 @@ let steps = [];
 let currentStepIndex = 0;
 let isInitialized = false;
 
+// Получаем функции рендеринга из глобального объекта
+const { renderAll } = window.rendering || {};
+
 // Функция обновления кнопок
 window.updateButtons = function() {
   if (window.playback) {
@@ -52,7 +55,7 @@ function generateGraph() {
   currentStepIndex = 0;
   
   // Рендерим первый шаг
-  if (steps.length > 0) {
+  if (steps.length > 0 && renderAll) {
     renderAll(graph, steps[0]);
   }
   
@@ -84,7 +87,7 @@ function handleGraphInput(e) {
         currentStepIndex = 0;
         
         // Рендерим первый шаг
-        if (steps.length > 0) {
+        if (steps.length > 0 && renderAll) {
           renderAll(graph, steps[0]);
         }
         
@@ -107,7 +110,7 @@ function stepForward() {
   if (steps.length === 0) return;
   if (currentStepIndex < steps.length - 1) {
     currentStepIndex++;
-    renderAll(graph, steps[currentStepIndex]);
+    if (renderAll) renderAll(graph, steps[currentStepIndex]);
     if (window.playback) window.playback.updateButtons();
   }
 }
@@ -116,7 +119,7 @@ function stepBackward() {
   if (steps.length === 0) return;
   if (currentStepIndex > 0) {
     currentStepIndex--;
-    renderAll(graph, steps[currentStepIndex]);
+    if (renderAll) renderAll(graph, steps[currentStepIndex]);
     if (window.playback) window.playback.updateButtons();
   }
 }
@@ -125,7 +128,7 @@ function resetPlayback() {
   if (steps.length === 0) return;
   
   currentStepIndex = 0;
-  renderAll(graph, steps[0]);
+  if (renderAll) renderAll(graph, steps[0]);
   
   if (window.playback) {
     window.playback.pause();
@@ -143,7 +146,7 @@ async function playFromCurrent() {
     if (!window.playback.isPlaying) break;
     
     currentStepIndex++;
-    renderAll(graph, steps[currentStepIndex]);
+    if (renderAll) renderAll(graph, steps[currentStepIndex]);
     window.playback.updateButtons();
   }
   
@@ -157,6 +160,7 @@ function initialize() {
   if (isInitialized) return;
   
   console.log('Initializing Dijkstra...');
+  console.log('renderAll available:', !!renderAll);
   
   initPlaybackControls();
   
