@@ -1,6 +1,6 @@
 // Пошаговая логика Дейкстры
 
-// Класс для очереди с приоритетом (адаптированный из min_heap.js)
+// Класс для очереди с приоритетом (Min-Heap)
 class MinPriorityQueue {
   constructor() {
     this.heap = [];
@@ -14,6 +14,7 @@ class MinPriorityQueue {
     const node = { priority, value };
     this.heap.push(node);
     this._bubbleUp();
+    return node;
   }
 
   delMin() {
@@ -66,7 +67,8 @@ class MinPriorityQueue {
   }
 
   toArray() {
-    return this.heap.map(node => ({ value: node.value, priority: node.priority }));
+    // Возвращаем отсортированную копию для отображения
+    return [...this.heap].sort((a, b) => a.priority - b.priority);
   }
 }
 
@@ -78,7 +80,7 @@ function buildDijkstraSteps(graph, source = 0) {
   // Инициализация
   const dist = new Array(V).fill(Infinity);
   const pred = new Array(V).fill(null);
-  const visited = [];
+  const visited = new Array(V).fill(false);
   const pq = new MinPriorityQueue();
   
   dist[source] = 0;
@@ -92,12 +94,21 @@ function buildDijkstraSteps(graph, source = 0) {
     pred: [...pred],
     visited: [...visited],
     queue: pq.toArray(),
-    description: `Initialize distances: dist[${source}] = 0, all others = ∞`
+    description: `Начинаем поиск кратчайших путей от вершины ${source}`
   });
   
   while (!pq.isEmpty()) {
+    // Получаем текущее состояние очереди ДО извлечения
+    const queueBefore = pq.toArray();
+    
     // Выбираем вершину с минимальным расстоянием
     const v = pq.delMin();
+    
+    // Если вершина уже посещена, пропускаем
+    if (visited[v]) continue;
+    
+    // Помечаем как посещенную
+    visited[v] = true;
     
     steps.push({
       type: 'select_vertex',
@@ -105,12 +116,9 @@ function buildDijkstraSteps(graph, source = 0) {
       dist: [...dist],
       pred: [...pred],
       visited: [...visited],
-      queue: pq.toArray(),
-      description: `Select vertex ${v} with smallest distance = ${dist[v]}`
+      queue: queueBefore,
+      description: `Извлекаем вершину ${v} с расстоянием ${dist[v]}`
     });
-    
-    // Помечаем как посещенную
-    visited.push(v);
     
     steps.push({
       type: 'visit_vertex',
@@ -119,12 +127,16 @@ function buildDijkstraSteps(graph, source = 0) {
       pred: [...pred],
       visited: [...visited],
       queue: pq.toArray(),
-      description: `Mark vertex ${v} as visited`
+      description: `Посещаем вершину ${v}`
     });
     
     // Проверяем все смежные ребра
     for (const edge of graph.adjList(v)) {
       const w = edge.to;
+      const weight = edge.weight;
+      
+      // Пропускаем уже посещенные вершины
+      if (visited[w]) continue;
       
       steps.push({
         type: 'check_edge',
@@ -133,12 +145,12 @@ function buildDijkstraSteps(graph, source = 0) {
         pred: [...pred],
         visited: [...visited],
         queue: pq.toArray(),
-        currentEdge: { from: v, to: w, weight: edge.weight },
-        description: `Check edge (${v} → ${w}) with weight ${edge.weight}`
+        currentEdge: { from: v, to: w, weight: weight },
+        description: `Проверяем ребро (${v} → ${w}) с весом ${weight}`
       });
       
       // Релаксация
-      const newDist = dist[v] + edge.weight;
+      const newDist = dist[v] + weight;
       if (newDist < dist[w]) {
         const oldDist = dist[w];
         dist[w] = newDist;
@@ -155,14 +167,21 @@ function buildDijkstraSteps(graph, source = 0) {
           pred: [...pred],
           visited: [...visited],
           queue: pq.toArray(),
-          relaxedEdge: { from: v, to: w, weight: edge.weight },
-          description: `Relax edge (${v} → ${w}): distance updated from ${formatDistance(oldDist)} to ${newDist}`
+          relaxedEdge: { from: v, to: w, weight: weight },
+          description: `Обновляем расстояние до вершины ${w}: ${oldDist === Infinity ? '∞' : oldDist} → ${newDist}`
         });
       }
     }
   }
   
-  // Финальный шаг
+  // Финальный шаг - показываем все найденные пути
+  const paths = [];
+  for (let i = 0; i < V; i++) {
+    if (i !== source && dist[i] !== Infinity) {
+      paths.push(`0 → ${i} = ${dist[i]}`);
+    }
+  }
+  
   steps.push({
     type: 'finish',
     activeVertex: null,
@@ -170,46 +189,13 @@ function buildDijkstraSteps(graph, source = 0) {
     pred: [...pred],
     visited: [...visited],
     queue: [],
-    description: 'Algorithm finished. Shortest paths found!'
+    description: `Алгоритм завершен. Найдены пути: ${paths.join(', ')}`
   });
   
   return steps;
 }
 
-// Построение дерева кратчайших путей для отображения
-function buildPathTree(pred) {
-  const edges = [];
-  pred.forEach((from, to) => {
-    if (from !== null) {
-      edges.push({ from, to });
-    }
-  });
-  return edges;
-}
-
-// Формирование описания шага
-function getStepDescription(step) {
-  switch (step.type) {
-    case 'init':
-      return 'Initialize distances';
-    case 'select_vertex':
-      return `Select vertex ${step.activeVertex}`;
-    case 'visit_vertex':
-      return `Visit vertex ${step.activeVertex}`;
-    case 'check_edge':
-      return `Check edge (${step.currentEdge.from} → ${step.currentEdge.to})`;
-    case 'relax_edge':
-      return `Update distance to vertex ${step.updatedVertex}`;
-    case 'finish':
-      return 'Algorithm complete';
-    default:
-      return '';
-  }
-}
-
 // Экспорт
 window.steps = {
-  buildDijkstraSteps,
-  buildPathTree,
-  getStepDescription
+  buildDijkstraSteps
 };

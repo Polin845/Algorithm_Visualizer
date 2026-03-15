@@ -1,12 +1,10 @@
 // Главный файл Дейкстры
 
-// Глобальные переменные (только те, что не объявлены в других файлах)
-let steps = [];
-let currentStepIndex = 0;
+// Глобальные переменные (только те, что НЕ объявлены в других файлах)
 let isInitialized = false;
 
 // Получаем функции рендеринга из глобального объекта
-const { renderAll } = window.rendering || {};
+// НЕ объявляем renderAll заново!
 
 // Функция обновления кнопок
 window.updateButtons = function() {
@@ -55,8 +53,8 @@ function generateGraph() {
   currentStepIndex = 0;
   
   // Рендерим первый шаг
-  if (steps.length > 0 && renderAll) {
-    renderAll(graph, steps[0]);
+  if (steps.length > 0 && window.rendering?.renderAll) {
+    window.rendering.renderAll(graph, steps[0]);
   }
   
   // Обновляем поле ввода
@@ -87,8 +85,8 @@ function handleGraphInput(e) {
         currentStepIndex = 0;
         
         // Рендерим первый шаг
-        if (steps.length > 0 && renderAll) {
-          renderAll(graph, steps[0]);
+        if (steps.length > 0 && window.rendering?.renderAll) {
+          window.rendering.renderAll(graph, steps[0]);
         }
         
         // Обновляем кнопки
@@ -110,7 +108,7 @@ function stepForward() {
   if (steps.length === 0) return;
   if (currentStepIndex < steps.length - 1) {
     currentStepIndex++;
-    if (renderAll) renderAll(graph, steps[currentStepIndex]);
+    if (window.rendering?.renderAll) window.rendering.renderAll(graph, steps[currentStepIndex]);
     if (window.playback) window.playback.updateButtons();
   }
 }
@@ -119,7 +117,7 @@ function stepBackward() {
   if (steps.length === 0) return;
   if (currentStepIndex > 0) {
     currentStepIndex--;
-    if (renderAll) renderAll(graph, steps[currentStepIndex]);
+    if (window.rendering?.renderAll) window.rendering.renderAll(graph, steps[currentStepIndex]);
     if (window.playback) window.playback.updateButtons();
   }
 }
@@ -128,7 +126,7 @@ function resetPlayback() {
   if (steps.length === 0) return;
   
   currentStepIndex = 0;
-  if (renderAll) renderAll(graph, steps[0]);
+  if (window.rendering?.renderAll) window.rendering.renderAll(graph, steps[0]);
   
   if (window.playback) {
     window.playback.pause();
@@ -146,7 +144,7 @@ async function playFromCurrent() {
     if (!window.playback.isPlaying) break;
     
     currentStepIndex++;
-    if (renderAll) renderAll(graph, steps[currentStepIndex]);
+    if (window.rendering?.renderAll) window.rendering.renderAll(graph, steps[currentStepIndex]);
     window.playback.updateButtons();
   }
   
@@ -160,7 +158,7 @@ function initialize() {
   if (isInitialized) return;
   
   console.log('Initializing Dijkstra...');
-  console.log('renderAll available:', !!renderAll);
+  console.log('renderAll available:', !!window.rendering?.renderAll);
   
   initPlaybackControls();
   

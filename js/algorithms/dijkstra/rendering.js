@@ -1,6 +1,7 @@
 // Функции для отрисовки
 
 let nodePositions = {};
+let lastGraphV = -1;
 
 function clearSvg(svg) {
   while (svg.firstChild) svg.removeChild(svg.firstChild);
@@ -13,8 +14,8 @@ function createArrowhead(svg, id, color) {
   marker.setAttribute('viewBox', '0 0 10 10');
   marker.setAttribute('refX', '8');
   marker.setAttribute('refY', '5');
-  marker.setAttribute('markerWidth', '5');
-  marker.setAttribute('markerHeight', '5');
+  marker.setAttribute('markerWidth', '6');
+  marker.setAttribute('markerHeight', '6');
   marker.setAttribute('orient', 'auto');
   
   const polygon = document.createElementNS(SVG_NS, 'polygon');
@@ -28,12 +29,32 @@ function createArrowhead(svg, id, color) {
   return `url(#${id})`;
 }
 
+function generateNodePositions(nodeCount, width = 700, height = 400) {
+  const positions = {};
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const radius = Math.min(width, height) * 0.35;
+  
+  for (let i = 0; i < nodeCount; i++) {
+    const angle = (i / nodeCount) * 2 * Math.PI - Math.PI / 2;
+    positions[i] = {
+      x: centerX + radius * Math.cos(angle),
+      y: centerY + radius * Math.sin(angle)
+    };
+  }
+  
+  return positions;
+}
+
+function formatDistance(dist) {
+  return dist === Infinity ? '∞' : dist.toString();
+}
+
 // Отрисовка ребра
 function drawEdge(svg, from, to, edge, options = {}) {
   const {
     isRelaxed = false,
     isPath = false,
-    isActive = false
   } = options;
   
   const fromPos = nodePositions[from];
@@ -44,16 +65,13 @@ function drawEdge(svg, from, to, edge, options = {}) {
   // Определяем цвет и толщину
   let color = '#4b5563';
   let width = 2;
-  let className = 'edge-line';
   
   if (isPath) {
-    color = COLORS.path;
+    color = '#34d399';
     width = 3;
-    className += ' path';
   } else if (isRelaxed) {
-    color = COLORS.edge;
+    color = '#fb7185';
     width = 3;
-    className += ' relaxed';
   }
   
   const line = document.createElementNS(SVG_NS, 'line');
@@ -63,7 +81,10 @@ function drawEdge(svg, from, to, edge, options = {}) {
   line.setAttribute('y2', toPos.y);
   line.setAttribute('stroke', color);
   line.setAttribute('stroke-width', width);
-  line.classList.add(className);
+  
+  line.classList.add('edge-line');
+  if (isPath) line.classList.add('path');
+  if (isRelaxed) line.classList.add('relaxed');
   
   svg.appendChild(line);
   
@@ -74,21 +95,24 @@ function drawEdge(svg, from, to, edge, options = {}) {
   // Смещаем подпись в сторону
   const dx = toPos.x - fromPos.x;
   const dy = toPos.y - fromPos.y;
-  const nx = dy / Math.sqrt(dx*dx + dy*dy);
-  const ny = -dx / Math.sqrt(dx*dx + dy*dy);
+  const length = Math.sqrt(dx*dx + dy*dy);
+  if (length === 0) return;
   
-  const textX = midX + nx * 15;
-  const textY = midY + ny * 15;
+  const nx = dy / length;
+  const ny = -dx / length;
+  
+  const textX = midX + nx * 18;
+  const textY = midY + ny * 18;
   
   // Фон для текста
   const bg = document.createElementNS(SVG_NS, 'rect');
-  bg.setAttribute('x', textX - 15);
-  bg.setAttribute('y', textY - 12);
-  bg.setAttribute('width', '30');
-  bg.setAttribute('height', '24');
-  bg.setAttribute('rx', '6');
-  bg.setAttribute('ry', '6');
-  bg.setAttribute('fill', 'rgba(0,0,0,0.8)');
+  bg.setAttribute('x', textX - 18);
+  bg.setAttribute('y', textY - 14);
+  bg.setAttribute('width', '36');
+  bg.setAttribute('height', '28');
+  bg.setAttribute('rx', '10');
+  bg.setAttribute('ry', '10');
+  bg.setAttribute('fill', 'rgba(0,0,0,0.9)');
   bg.classList.add('edge-text-bg');
   svg.appendChild(bg);
   
@@ -117,7 +141,7 @@ function drawNode(svg, node, options = {}) {
   const circle = document.createElementNS(SVG_NS, 'circle');
   circle.setAttribute('cx', pos.x);
   circle.setAttribute('cy', pos.y);
-  circle.setAttribute('r', NODE_RADIUS);
+  circle.setAttribute('r', 22);
   circle.classList.add('node-circle');
   
   if (isActive) circle.classList.add('active');
@@ -140,20 +164,22 @@ function drawNode(svg, node, options = {}) {
 function renderGraph(graph, step) {
   if (!graph || !graphSvg) return;
   
+  const currentV = graph.V();
+  if (currentV !== lastGraphV) {
+    nodePositions = generateNodePositions(currentV, 700, 400);
+    lastGraphV = currentV;
+  }
+  
   clearSvg(graphSvg);
   
-  // Создаем стрелки
   createArrowhead(graphSvg, 'arrow', '#4b5563');
-  
-  // Получаем позиции узлов
-  nodePositions = generateNodePositions(graph.V(), 700, 400);
   
   // Рисуем все ребра
   for (let i = 0; i < graph.V(); i++) {
     for (let edge of graph.adjList(i)) {
       const isRelaxed = step?.relaxedEdge?.from === edge.from && 
                         step?.relaxedEdge?.to === edge.to;
-      const isPath = step?.pathEdges?.some(e => e.from === edge.from && e.to === edge.to);
+      const isPath = step?.pred && step.pred[edge.to] === edge.from;
       
       drawEdge(graphSvg, edge.from, edge.to, edge, {
         isRelaxed,
@@ -165,7 +191,7 @@ function renderGraph(graph, step) {
   // Рисуем все вершины
   for (let i = 0; i < graph.V(); i++) {
     const isActive = step?.activeVertex === i;
-    const isVisited = step?.visited?.includes(i);
+    const isVisited = step?.visited && step.visited[i];
     const isSource = i === 0;
     
     drawNode(graphSvg, i, { isActive, isVisited, isSource });
@@ -214,24 +240,31 @@ function renderInfoPanel(step) {
     distancesEl.appendChild(container);
   }
   
-  // Очередь
-  if (queueEl && step.queue) {
+  // Очередь с приоритетом
+  if (queueEl) {
     queueEl.innerHTML = '';
     const container = document.createElement('div');
     container.className = 'queue-container';
     
-    step.queue.forEach((item, index) => {
-      const div = document.createElement('div');
-      div.className = 'queue-item';
-      if (step.activeVertex === item.value) div.classList.add('current');
-      
-      div.innerHTML = `
-        <span class="vertex">Vertex ${item.value}</span>
-        <span class="priority">${formatDistance(item.priority)}</span>
-      `;
-      
-      container.appendChild(div);
-    });
+    if (!step.queue || step.queue.length === 0) {
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'queue-empty';
+      emptyDiv.textContent = 'Очередь пуста';
+      container.appendChild(emptyDiv);
+    } else {
+      step.queue.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = 'queue-item';
+        if (step.activeVertex === item.value) div.classList.add('current');
+        
+        div.innerHTML = `
+          <span class="vertex">${item.value}</span>
+          <span class="priority">${formatDistance(item.priority)}</span>
+        `;
+        
+        container.appendChild(div);
+      });
+    }
     
     queueEl.appendChild(container);
   }
@@ -242,8 +275,10 @@ function renderInfoPanel(step) {
     const container = document.createElement('div');
     container.className = 'path-tree';
     
+    let hasEdges = false;
     step.pred.forEach((pred, i) => {
       if (pred !== null) {
+        hasEdges = true;
         const edge = graph.getEdge(pred, i);
         if (edge) {
           const div = document.createElement('div');
@@ -258,6 +293,13 @@ function renderInfoPanel(step) {
         }
       }
     });
+    
+    if (!hasEdges) {
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'empty-state';
+      emptyDiv.textContent = 'Нет построенных путей';
+      container.appendChild(emptyDiv);
+    }
     
     pathTreeEl.appendChild(container);
   }

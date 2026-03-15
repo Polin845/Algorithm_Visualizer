@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Algorithm Visualizer - Dijkstra</title>
+  <title>Визуализатор алгоритмов - Дейкстра</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/algorithms/dijkstra.css">
 </head>
 <body>
   <header class="header">
-    <h1>Algorithm Visualizer</h1>
+    <h1>Визуализатор алгоритмов</h1>
     <div class="nav-container"></div>
   </header>
 
@@ -19,11 +19,11 @@
 
     <!-- Специфичные контролы -->
     <section class="controls-row algorithm-controls">
-      <button id="generateGraphBtn" class="btn">Generate Graph</button>
+      <button id="generateGraphBtn" class="btn">Сгенерировать граф</button>
       <input id="graphInput" type="text" 
-             placeholder="e.g. 0-1-2, 1-2-1, 2-3-5" 
+             placeholder="Например: 0-1-4, 1-2-1, 2-3-5" 
              class="input-field" style="flex: 2;">
-      <div class="info-badge" id="sourceNode">Source: 0</div>
+      <div class="info-badge" id="sourceNode">Источник: 0</div>
     </section>
 
     <!-- Двухпанельная визуализация -->
@@ -31,12 +31,12 @@
       <!-- Левая панель - граф -->
       <div class="graph-panel">
         <div class="panel-header">
-          <h2>Graph</h2>
+          <h2>Граф</h2>
           <div class="legend">
-            <span class="legend-item"><span class="swatch swatch-default"></span> Unvisited</span>
-            <span class="legend-item"><span class="swatch swatch-active"></span> Current</span>
-            <span class="legend-item"><span class="swatch swatch-visited"></span> Visited</span>
-            <span class="legend-item"><span class="swatch swatch-edge"></span> Relaxed Edge</span>
+            <span class="legend-item"><span class="swatch swatch-default"></span> Не посещена</span>
+            <span class="legend-item"><span class="swatch swatch-active"></span> Текущая</span>
+            <span class="legend-item"><span class="swatch swatch-visited"></span> Посещена</span>
+            <span class="legend-item"><span class="swatch swatch-edge"></span> Обновленное ребро</span>
           </div>
         </div>
         <div class="graph-container">
@@ -47,29 +47,29 @@
       <!-- Правая панель - информация -->
       <div class="info-panel">
         <div class="info-section">
-          <h3>Current Step</h3>
+          <h3>Текущий шаг</h3>
           <div id="currentStep" class="step-description">
-            Click Play or Step Forward to start
+            Нажмите Play или Step Forward для начала
           </div>
         </div>
 
         <div class="info-section">
-          <h3>Current Vertex</h3>
+          <h3>Текущая вершина</h3>
           <div id="currentVertex" class="current-vertex">—</div>
         </div>
 
         <div class="info-section">
-          <h3>Distances</h3>
+          <h3>Расстояния от 0</h3>
           <div id="distances" class="distances-container"></div>
         </div>
 
         <div class="info-section">
-          <h3>Priority Queue</h3>
+          <h3>Очередь с приоритетом</h3>
           <div id="queue" class="queue-container"></div>
         </div>
 
         <div class="info-section">
-          <h3>Shortest Path Tree</h3>
+          <h3>Кратчайшие пути</h3>
           <div id="pathTree" class="path-tree"></div>
         </div>
       </div>
@@ -77,19 +77,19 @@
 
     <!-- Пояснения -->
     <details class="explanation-panel">
-      <summary>How Dijkstra's Algorithm Works</summary>
+      <summary>Как работает алгоритм Дейкстры</summary>
       <ol class="notes">
-        <li><strong>Initialize:</strong> Set distance to source = 0, all others = ∞</li>
-        <li><strong>Select:</strong> Pick unvisited vertex with smallest distance</li>
-        <li><strong>Relax:</strong> Update distances to neighbors if shorter path found</li>
-        <li><strong>Repeat:</strong> Until all vertices processed</li>
+        <li><strong>Инициализация:</strong> Расстояние до источника = 0, до остальных = ∞</li>
+        <li><strong>Выбор:</strong> Извлекаем вершину с наименьшим расстоянием из очереди</li>
+        <li><strong>Релаксация:</strong> Обновляем расстояния до соседей, если найден более короткий путь</li>
+        <li><strong>Повтор:</strong> Продолжаем, пока очередь не опустеет</li>
       </ol>
     </details>
   </main>
 
   <footer class="footer">
     <div class="footer-inner">
-      Tip: Green edges show the shortest path tree
+      Подсказка: Зеленые ребра показывают дерево кратчайших путей
     </div>
   </footer>
 
