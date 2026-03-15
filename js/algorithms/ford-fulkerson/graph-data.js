@@ -14,11 +14,18 @@ class Graph {
   }
 
   addEdge(from, to, capacity) {
+    // Проверяем, существует ли уже такое ребро
+    const key = `${from}-${to}`;
+    if (this.edges.has(key)) {
+      console.log(`Edge ${from}->${to} already exists, skipping`);
+      return false;
+    }
+    
     this.addNode(from);
     this.addNode(to);
-    const key = `${from}-${to}`;
     this.edges.set(key, { from, to, capacity, flow: 0 });
     this.adjacency.get(from).add(to);
+    return true;
   }
 
   getEdge(from, to) {
@@ -103,7 +110,7 @@ class Graph {
         return this.reconstructPath(parent);
       }
       
-      // Проверяем все возможные ребра (прямые и обратные)
+      // Проверяем все возможные ребра
       for (let [key, edge] of this.edges) {
         // Прямое ребро с остаточной capacity
         if (edge.from === current && edge.flow < edge.capacity && !parent.has(edge.to)) {
@@ -146,34 +153,31 @@ class Graph {
     return Math.max(...this.nodes);
   }
 
-  // Создание графа по умолчанию (как в презентации)
-  static createDefault() {
-    const graph = new Graph();
+  // Получить все пути от истока к стоку (для проверки)
+  findAllPaths() {
+    const paths = [];
+    const visited = new Set();
     
-    // Добавляем ребра из презентации
-    graph.addEdge(0, 1, 95);
-    graph.addEdge(0, 2, 32);
-    graph.addEdge(0, 3, 5);
-    graph.addEdge(0, 4, 6);
-    graph.addEdge(0, 5, 18);
+    function dfs(current, path) {
+      if (current === this.getSink()) {
+        paths.push([...path]);
+        return;
+      }
+      
+      visited.add(current);
+      
+      for (let [key, edge] of this.edges) {
+        if (edge.from === current && !visited.has(edge.to)) {
+          path.push(edge);
+          dfs.call(this, edge.to, path);
+          path.pop();
+        }
+      }
+      
+      visited.delete(current);
+    }
     
-    graph.addEdge(1, 6, 75);
-    graph.addEdge(1, 7, 57);
-    
-    graph.addEdge(2, 7, 9);
-    
-    graph.addEdge(3, 5, 24);
-    graph.addEdge(3, 7, 11);
-    
-    graph.addEdge(4, 5, 7);
-    graph.addEdge(4, 7, 81);
-    
-    graph.addEdge(5, 6, 20);
-    graph.addEdge(5, 7, 94);
-    
-    graph.addEdge(6, 8, 23);
-    graph.addEdge(7, 8, 16);
-    
-    return graph;
+    dfs.call(this, 0, []);
+    return paths;
   }
 }
