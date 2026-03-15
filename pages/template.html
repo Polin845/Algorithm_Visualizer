@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algorithm Visualizer - [Algorithm Name]</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/algorithms/[algorithm-name].css">
+</head>
+<body>
+  <header class="header">
+    <h1>Algorithm Visualizer</h1>
+    <div class="nav-container"></div>
+  </header>
+
+  <main class="main">
+    <!-- Секция контролов воспроизведения -->
+    <section id="playback-section"></section>
+
+    <!-- Секция специфичных контролов алгоритма -->
+    <section class="algorithm-controls">
+      <!-- Сюда вставляются generate, input и т.д. -->
+    </section>
+
+    <!-- Основная область визуализации -->
+    <section class="visualization" id="visualization">
+      <!-- Специфичная для алгоритма разметка -->
+    </section>
+
+    <!-- Панель пояснений -->
+    <section class="explanation-panel">
+      <h2>How it works</h2>
+      <ol class="notes" id="explanation-list">
+        <!-- Специфичные для алгоритма пояснения -->
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      Tip: Use the controls to step through the algorithm at your own pace
+    </div>
+  </footer>
+
+  <!-- Скрипты ядра -->
+  <script src="../js/core/playback-controls.js"></script>
+  <script src="../js/core/speed-manager.js"></script>
+  
+  <!-- Скрипты алгоритма -->
+  <script src="../js/algorithms/[algorithm-name]/constants.js"></script>
+  <script src="../js/algorithms/[algorithm-name]/state.js"></script>
+  <script src="../js/algorithms/[algorithm-name]/rendering.js"></script>
+  <script src="../js/algorithms/[algorithm-name]/steps.js"></script>
+  <script src="../js/algorithms/[algorithm-name]/main.js"></script>
+</body>
+</html>

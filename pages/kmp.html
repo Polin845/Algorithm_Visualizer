@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algorithm Visualizer - KMP</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/algorithms/kmp.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Algorithm Visualizer</h1>
+    <div class="nav-container"></div>
+  </header>
+
+  <main class="main">
+    <!-- Контролы воспроизведения -->
+    <section id="playback-section"></section>
+
+    <!-- Специфичные контролы -->
+    <section class="controls-row algorithm-controls">
+      <button id="generateBtn" class="btn">Generate Example</button>
+      <input id="textInput" type="text" 
+             placeholder="Text: e.g. ABCABCABC" 
+             class="input-field" style="flex: 2;">
+      <input id="patternInput" type="text" 
+             placeholder="Pattern: e.g. ABC" 
+             class="input-field" style="flex: 1;">
+    </section>
+
+    <!-- Двухпанельная визуализация -->
+    <div class="split-view">
+      <!-- Левая панель - объяснения -->
+      <div class="explanation-panel">
+        <div class="phase-indicator" id="phaseIndicator">
+          <div class="phase-tab active" data-phase="prefix">1. Префикс-функция</div>
+          <div class="phase-tab" data-phase="search">2. Поиск</div>
+        </div>
+        
+        <div id="explanationContent" class="explanation-content">
+          <h3>Построение префикс-функции</h3>
+          <div id="stepExplanation" class="step-explanation">
+            Нажмите Play для начала
+          </div>
+        </div>
+
+        <div class="info-box">
+          <h4>Текущие индексы</h4>
+          <div class="indices">
+            <div class="index-item">
+              <span class="index-label">i (текст):</span>
+              <span class="index-value" id="iIndex">0</span>
+            </div>
+            <div class="index-item">
+              <span class="index-label">j (образец):</span>
+              <span class="index-value" id="jIndex">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <h4>Найденные вхождения</h4>
+          <div id="matchesList" class="matches-list">
+            <div class="empty-state">Пока нет совпадений</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Правая панель - визуализация -->
+      <div class="visualization-panel">
+        <!-- Секция с текстом -->
+        <div class="viz-section">
+          <h3>Текст <span class="section-subtitle">(длина: <span id="textLength">0</span>)</span></h3>
+          <div class="text-container" id="textContainer">
+            <div class="text-content" id="textContent"></div>
+          </div>
+        </div>
+
+        <!-- Секция с образцом -->
+        <div class="viz-section">
+          <h3>Образец <span class="section-subtitle">(длина: <span id="patternLength">0</span>)</span></h3>
+          <div class="pattern-container" id="patternContainer">
+            <div class="text-content" id="patternContent"></div>
+          </div>
+        </div>
+
+        <!-- Секция с префикс-функцией -->
+        <div class="viz-section">
+          <h3>Префикс-функция π (pi)</h3>
+          <div class="pi-container" id="piContainer">
+            <div class="pi-array" id="piArray"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      Tip: Наблюдайте за индексами i и j, они показывают текущие позиции в тексте и образце
+    </div>
+  </footer>
+
+  <!-- Скрипты -->
+  <script src="../js/core/playback-controls.js"></script>
+  <script src="../js/core/navigation.js"></script>
+  <script src="../js/algorithms/kmp/constants.js"></script>
+  <script src="../js/algorithms/kmp/helpers.js"></script>
+  <script src="../js/algorithms/kmp/state.js"></script>
+  <script src="../js/algorithms/kmp/rendering.js"></script>
+  <script src="../js/algorithms/kmp/steps.js"></script>
+  <script src="../js/algorithms/kmp/main.js"></script>
+</body>
+</html>
