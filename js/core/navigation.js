@@ -1,3 +1,4 @@
+
 class NavigationManager {
   constructor() {
     this.algorithms = [

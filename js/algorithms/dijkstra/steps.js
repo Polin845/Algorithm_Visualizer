@@ -198,4 +198,4 @@ function buildDijkstraSteps(graph, source = 0) {
 // Экспорт
 window.steps = {
   buildDijkstraSteps
-};
+}
